@@ -32,6 +32,12 @@ public class Proyecto{
                     System.out.println();
                     System.out.print("Codigo: ");
                     int cod = scanner.nextInt();
+                    
+                    if(inventario.buscar(cod) != null){
+                        System.out.println("\nNo se permiten códigos repetidos");
+                        break;
+                    }
+
                     scanner.nextLine();
 
                     System.out.print("Nombre: ");
@@ -43,16 +49,47 @@ public class Proyecto{
                     System.out.print("Precio: ");
                     double precio = scanner.nextDouble();
 
-                    Componentes c = new Componentes(nom, cod, cant, precio);
-
-                    inventario.insertar(c);
+                    inventario.insertar(cod, nom, cant, precio);
                     break;
 
                 case 2:
-                    inventario.Listar();
+                    inventario.listar();
                     break;
 
                 case 3:
+                    int op;
+                    do{                  
+                    System.out.println("\n---BÚSQUEDA---");
+                    System.out.println("\n1. Por código");
+                    System.out.println("2. Por nombre");
+                    System.out.println("0. Regresar");                    
+                    System.out.print("\nElija una opción: ");
+                    op = scanner.nextInt();
+
+                        switch (op){
+                            case 0:
+                                break;
+                            case 1:
+                                System.out.print("\nIngrese el código del componente: ");
+                                cod = scanner.nextInt();
+                                Componentes b = inventario.buscar(cod);
+
+                                if(b == null){
+                                    System.out.println("\nNo se encontró un componente con ese código.");
+                                    break;
+                                }
+                                System.out.println("\nComponente encontrado: ");
+                                inventario.info(b);
+                                break;
+
+                            case 2:
+                                break;
+                            
+                            default:
+                                System.out.print("\nElija una opcion valida\n");
+                                break;
+                        }
+                    }   while(op != 0);
                     break;
 
                 case 4:
@@ -62,8 +99,9 @@ public class Proyecto{
                     break;
 
                 default:
+                    System.out.print("\nElija una opcion valida\n");
                     break;
-
+                    
             }
         }while(opcion != 0);
     }
