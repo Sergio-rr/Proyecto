@@ -38,5 +38,14 @@ public class Inventario {
         return null;
     }
 
+    public Componentes buscar(String nombre){ //Busqueda por nombre
+        for (Componentes n : componentes){
+                if (n.getNombre().equalsIgnoreCase(nombre)){
+                    return n;
+                }
+        }
+        return null;
+    }
+
     //Buscar por nombre(sobrecarga), Modificar, Eliminar 
 }

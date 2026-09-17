@@ -1,7 +1,6 @@
-import java.util.Scanner;
-
-import clases.Inventario;
 import clases.Componentes;
+import clases.Inventario;
+import java.util.Scanner;
 
 public class Proyecto{
 
@@ -83,8 +82,19 @@ public class Proyecto{
                                 break;
 
                             case 2:
+                                scanner.nextLine();
+                                System.out.print("\nIngrese el nombre del componente: ");
+                                nom = scanner.nextLine();
+                                Componentes n = inventario.buscar(nom);
+
+                                if(n == null){
+                                    System.out.println("\nNo se encontró un componente con ese nombre.");
+                                    break;
+                                }
+                                System.out.println("\nComponente encontrado: ");
+                                inventario.info(n);
                                 break;
-                            
+                          
                             default:
                                 System.out.print("\nElija una opcion valida\n");
                                 break;
