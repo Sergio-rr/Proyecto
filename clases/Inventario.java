@@ -1,15 +1,29 @@
 package clases;
-
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Inventario {
 
     private ArrayList<Componentes> componentes = new ArrayList<>();
 
-   
     public void insertar(int cod, String nom, int cant, double precio){
+       Scanner sc = new Scanner(System.in);
+
+       while(true){
+        try{
+            if (nom.matches(".*\\d.*")){
+                throw new IllegalArgumentException("El nombre no puede contener números.");
+            }
+            
         componentes.add(new Componentes(nom, cod, cant, precio));
         System.out.println("Componente registrado correctamente.");
+        break;
+        }catch (IllegalArgumentException e){
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Ingrese un nombre válido");
+            nom = sc.nextLine();
+        }
+    }
     }
 
     public void info(Componentes c){//Para usarlo en listar y buscar
@@ -46,6 +60,5 @@ public class Inventario {
         }
         return null;
     }
-
     //Buscar por nombre(sobrecarga), Modificar, Eliminar 
 }
