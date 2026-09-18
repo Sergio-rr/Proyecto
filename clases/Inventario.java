@@ -60,5 +60,18 @@ public class Inventario {
         }
         return null;
     }
+
+    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio){
+        Componentes c = buscar(codigo);
+        if (c != null) {
+            c.setNombre(nuevoNombre);
+            c.setCantidad(nuevaCantidad);
+            c.setPrecio(nuevoPrecio);
+            System.out.println("Componente modificado correctamente.");
+        } else {
+            System.out.println("No se encontró un componente con ese código.");
+        }
+    }
+
     //Buscar por nombre(sobrecarga), Modificar, Eliminar 
 }
