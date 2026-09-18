@@ -1,5 +1,7 @@
 import clases.Componentes;
 import clases.Inventario;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Proyecto{
@@ -21,6 +23,8 @@ public class Proyecto{
             System.out.println("5. Eliminar ");
             System.out.println("0. Salir ");
             System.out.print("\nEliga una opción: ");
+
+            try{
             opcion = scanner.nextInt();
 
             switch (opcion) {
@@ -28,7 +32,7 @@ public class Proyecto{
                     System.out.println("-Saliendo del sistema-");
                     break;
                 case 1:
-                    System.out.println();
+                    System.out.println();             
                     System.out.print("Codigo: ");
                     int cod = scanner.nextInt();
                     
@@ -50,7 +54,7 @@ public class Proyecto{
 
                     inventario.insertar(cod, nom, cant, precio);
                     break;
-
+            
                 case 2:
                     inventario.listar();
                     break;
@@ -110,8 +114,13 @@ public class Proyecto{
 
                 default:
                     System.out.print("\nElija una opcion valida\n");
-                    break;
-                    
+                    break;                  
+            }
+        }
+            catch (InputMismatchException e){
+                System.out.println("\nERROR: Debe ingresar un número.");
+                scanner.nextLine();
+                opcion = -1;
             }
         }while(opcion != 0);
     }
