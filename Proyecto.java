@@ -187,6 +187,11 @@ public class Proyecto{
                     break;
 
                 case 5:
+
+                    System.out.print("\nIngrese el código del componente a eliminar: ");
+                    int del= scanner.nextInt();
+                    Componentes d = inventario.buscar(del);
+                    inventario.eliminar(d);                
                     break;
 
                 default:

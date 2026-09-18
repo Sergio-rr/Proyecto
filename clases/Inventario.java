@@ -73,5 +73,14 @@ public class Inventario {
         }
     }
 
+    public void eliminar(Componentes c){
+        if (c != null) {
+            componentes.remove(c);
+            System.out.println("Componente eliminado correctamente.");
+        } else {
+            System.out.println("No se encontró un componente con ese código.");
+        }
+    }
+
     //Buscar por nombre(sobrecarga), Modificar, Eliminar 
 }
