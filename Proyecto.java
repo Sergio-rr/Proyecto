@@ -14,7 +14,7 @@ public class Proyecto{
         do{
             //Menu de opciones
             //Insertar, Listar, Buscar, Modificar, Eliminar, Salir
-            System.out.println("\n---SISTEMA DE INVENTARIO DE COMPONENTES ELECTRONICOS(TEMPORAL)---");
+            System.out.println("\n---SIPCE---");
             System.out.println("\n1. Insertar ");
             System.out.println("2. Listar ");
             System.out.println("3. Buscar ");
