@@ -1,6 +1,5 @@
-#Nombre del Proyecto: Sistema de Inventario de Componentes Electrónicos
-
-#Integrantes
+#Nombre del Proyecto: SIPCE - Sistema de Inventario para Componentes Electrónicos
+#Integrantes:
 #-Sergio Adrian Ramirez Rodriguez
 #-Carlos Andre Alcantara Quispe
 #-Oliver Aldair Mollo Chambi
