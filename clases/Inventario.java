@@ -1,15 +1,29 @@
 package clases;
-
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Inventario {
 
     private ArrayList<Componentes> componentes = new ArrayList<>();
 
-   
     public void insertar(int cod, String nom, int cant, double precio){
+       Scanner sc = new Scanner(System.in);
+
+       while(true){
+        try{
+            if (nom.matches(".*\\d.*")){
+                throw new IllegalArgumentException("El nombre no puede contener números.");
+            }
+            
         componentes.add(new Componentes(nom, cod, cant, precio));
         System.out.println("Componente registrado correctamente.");
+        break;
+        }catch (IllegalArgumentException e){
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Ingrese un nombre válido");
+            nom = sc.nextLine();
+        }
+    }
     }
 
     public void info(Componentes c){//Para usarlo en listar y buscar
@@ -45,6 +59,27 @@ public class Inventario {
                 }
         }
         return null;
+    }
+
+    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio){
+        Componentes c = buscar(codigo);
+        if (c != null) {
+            c.setNombre(nuevoNombre);
+            c.setCantidad(nuevaCantidad);
+            c.setPrecio(nuevoPrecio);
+            System.out.println("Componente modificado correctamente.");
+        } else {
+            System.out.println("No se encontró un componente con ese código.");
+        }
+    }
+
+    public void eliminar(Componentes c){
+        if (c != null) {
+            componentes.remove(c);
+            System.out.println("Componente eliminado correctamente.");
+        } else {
+            System.out.println("No se encontró un componente con ese código.");
+        }
     }
 
     //Buscar por nombre(sobrecarga), Modificar, Eliminar 
