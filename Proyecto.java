@@ -51,7 +51,24 @@ public class Proyecto{
                     System.out.print("Precio: ");
                     double precio = scanner.nextDouble();
 
-                    inventario.insertar(cod, nom, cant, precio);
+                    scanner.nextLine();
+                    System.out.print("Categoria: ");
+                    inventario.Mostrarcategorias();
+                    String categoria = scanner.nextLine();
+
+                    if(categoria.equalsIgnoreCase("+1")){
+
+                        System.out.println("Ingrese la nueva categoria: ");
+                        String NueCat = scanner.nextLine();
+                        inventario.NueCat(NueCat);
+                        categoria = NueCat;
+                    }
+
+                    else if(!inventario.BuscarCat(categoria)){
+                        System.out.println("No existe esa categoria");
+                        break;
+                    }
+                    inventario.insertar(cod, nom, cant, precio, categoria);
                     break;
             
                 case 2:
@@ -68,39 +85,43 @@ public class Proyecto{
                     System.out.print("\nElija una opción: ");
                     op = scanner.nextInt();
 
-                        switch (op){
-                            case 0:
-                                break;
-                            case 1:
-                                System.out.print("\nIngrese el código del componente: ");
-                                cod = scanner.nextInt();
-                                Componentes b = inventario.buscar(cod);
+                        
+                    switch (op){
+                        case 0:
+                            break;
+                        case 1:
+                            System.out.print("\nIngrese el código del componente: ");
+                            cod = scanner.nextInt();
+                            Componentes b = inventario.buscar(cod);
 
-                                if(b == null){
-                                    System.out.println("\nNo se encontró un componente con ese código.");
-                                    break;
-                                }
-                                System.out.println("\nComponente encontrado: ");
-                                inventario.info(b);
+                            if(b == null){
+                                System.out.println("\nNo se encontró un componente con ese código.");
                                 break;
+                            }
+                            System.out.println("\nComponente encontrado: ");
+                            inventario.info(b);
+                            break;
 
-                            case 2:
-                                scanner.nextLine();
-                                System.out.print("\nIngrese el nombre del componente: ");
-                                nom = scanner.nextLine();
-                                Componentes n = inventario.buscar(nom);
+                        case 2:
+                            scanner.nextLine();
+                            System.out.print("\nIngrese el nombre del componente: ");
+                            nom = scanner.nextLine();
+                            Componentes n = inventario.buscar(nom);
 
-                                if(n == null){
-                                    System.out.println("\nNo se encontró un componente con ese nombre.");
-                                    break;
-                                }
-                                System.out.println("\nComponente encontrado: ");
-                                inventario.info(n);
+                            if(n == null){
+                                System.out.println("\nNo se encontró un componente con ese nombre.");
                                 break;
+                            }
+                            System.out.println("\nComponente encontrado: ");
+                            inventario.info(n);
+
+                                
+                            nom = scanner.nextLine();
+                            break;
                           
-                            default:
-                                System.out.print("\nElija una opcion valida\n");
-                                break;
+                        default:
+                            System.out.print("\nElija una opcion valida\n");
+                            break;
                         }
                     }   while(op != 0);
                     break;

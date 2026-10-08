@@ -5,8 +5,15 @@ import java.util.Scanner;
 public class Inventario {
 
     private ArrayList<Componentes> componentes = new ArrayList<>();
+    private ArrayList<String> categorias = new ArrayList<>();
 
-    public void insertar(int cod, String nom, int cant, double precio){
+    public Inventario() {
+        categorias.add("Microcontroladores");
+        categorias.add("Sensores");
+        categorias.add("Componentes Pasivos");
+        categorias.add("Semiconductores");
+    }
+    public void insertar(int cod, String nom, int cant, double precio, String cat){
        Scanner sc = new Scanner(System.in);
 
        while(true){
@@ -15,7 +22,7 @@ public class Inventario {
                 throw new IllegalArgumentException("El nombre no puede contener números.");
             }
             
-        componentes.add(new Componentes(nom, cod, cant, precio));
+        componentes.add(new Componentes(nom, cod, cant, precio, cat));
         System.out.println("Componente registrado correctamente.");
         break;
         }catch (IllegalArgumentException e){
@@ -29,7 +36,7 @@ public class Inventario {
     public void info(Componentes c){//Para usarlo en listar y buscar
         System.out.println(
             "Código: " + c.getCodigo() + " | Nombre: " + c.getNombre() +
-            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio()
+            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Nombre: " + c.getCategoria()+ " | Fecha: " + c.getFecha()
         );
     }
 
@@ -82,5 +89,26 @@ public class Inventario {
         }
     }
 
-    //Buscar por nombre(sobrecarga), Modificar, Eliminar 
+    public void Mostrarcategorias(){//Muestra las categorias disponibles
+        if (categorias.isEmpty()) {
+        System.out.println("No hay categorias registradas.");
+        return;
+        }
+        System.out.println("\n---CATEGORIAS---");
+        for (String ca : categorias) {System.out.println(" - " + ca);
+        }
+    }
+
+    public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
+        for (String ca : categorias) {
+            if (ca.equalsIgnoreCase(cate)) {
+                return true;
+            }      
+        }
+        return false;
+    }
+    public void NueCat(String nueCat) { // Añade una nueva categoria
+        categorias.add(nueCat); 
+        System.out.println("Categoría '" + nueCat + "' registrada con éxito.");
+    }
 }
