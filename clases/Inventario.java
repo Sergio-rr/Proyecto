@@ -1,12 +1,20 @@
 package clases;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Inventario {
 
     private ArrayList<Componentes> componentes = new ArrayList<>();
+    private ArrayList<String> categorias = new ArrayList<>();
 
-    public void insertar(int cod, String nom, int cant, double precio){
+    public Inventario() {
+        categorias.add("Microcontroladores");
+        categorias.add("Sensores");
+        categorias.add("Componentes Pasivos");
+        categorias.add("Semiconductores");
+    }
+    public void insertar(int cod, String nom, int cant, double precio, String cat){
        Scanner sc = new Scanner(System.in);
 
        while(true){
@@ -15,7 +23,7 @@ public class Inventario {
                 throw new IllegalArgumentException("El nombre no puede contener números.");
             }
             
-        componentes.add(new Componentes(nom, cod, cant, precio));
+        componentes.add(new Componentes(nom, cod, cant, precio, cat));
         System.out.println("Componente registrado correctamente.");
         break;
         }catch (IllegalArgumentException e){
@@ -29,10 +37,10 @@ public class Inventario {
     public void info(Componentes c){//Para usarlo en listar y buscar
         System.out.println(
             "Código: " + c.getCodigo() + " | Nombre: " + c.getNombre() +
-            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio()
+            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Categoria: " + c.getCategoria()+ " | Fecha: " + c.getFecha()
         );
     }
-
+    
     public void listar(){//Muestra todos los componentes
         if (componentes.isEmpty()) {
             System.out.println("No hay componentes registrados.");
@@ -41,6 +49,30 @@ public class Inventario {
         
         System.out.println("\n---LISTA DE COMPONENTES---");
         for (Componentes c : componentes) { info(c); }
+    }
+
+    public void OrdenarCod(){
+        Collections.sort(componentes, (c1, c2) -> Integer.valueOf(c1.getCodigo()).compareTo(c2.getCodigo()));//RF-22
+    }
+
+    public void OrdenarNom(){
+        Collections.sort(componentes, (c1, c2) -> c1.getNombre().compareTo(c2.getNombre()));//RF-23
+    }
+
+    public void OrdenarCat(){
+        Collections.sort(componentes, (c1, c2) -> c1.getCategoria().compareTo(c2.getCategoria()));//RF-24
+    }
+
+    public void OrdenarStock(){
+        Collections.sort(componentes, (c1, c2) -> Integer.valueOf(c1.getCantidad()).compareTo(c2.getCantidad()));//RF-26
+    }
+
+    public void OrdenarPrecio(){
+        Collections.sort(componentes, (c1, c2) -> Double.compare(c1.getPrecio(), c2.getPrecio()));//RF-EXTRA
+    }
+
+    public void OrdenarFecha(){
+        Collections.sort(componentes, (c1, c2) -> c1.getFecha().compareTo(c2.getFecha()));//RF-25
     }
 
     public Componentes buscar(int codigo){ //Busqueda por codigo
@@ -54,19 +86,21 @@ public class Inventario {
 
     public Componentes buscar(String nombre){ //Busqueda por nombre
         for (Componentes n : componentes){
-                if (n.getNombre().equalsIgnoreCase(nombre)){
-                    return n;
-                }
+            if (n.getNombre().equalsIgnoreCase(nombre)){
+                return n;
+            }
         }
         return null;
     }
+    
 
-    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio){
+    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio, String nuevaCategoria){
         Componentes c = buscar(codigo);
         if (c != null) {
             c.setNombre(nuevoNombre);
             c.setCantidad(nuevaCantidad);
             c.setPrecio(nuevoPrecio);
+            c.setCategoria(nuevaCategoria);
             System.out.println("Componente modificado correctamente.");
         } else {
             System.out.println("No se encontró un componente con ese código.");
@@ -82,5 +116,26 @@ public class Inventario {
         }
     }
 
-    //Buscar por nombre(sobrecarga), Modificar, Eliminar 
+    public void Mostrarcategorias(){//Muestra las categorias disponibles
+        if (categorias.isEmpty()) {
+        System.out.println("No hay categorias registradas.");
+        return;
+        }
+        System.out.println("\n---CATEGORIAS---");
+        for (String ca : categorias) {System.out.println(" - " + ca);
+        }
+    }
+
+    public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
+        for (String ca : categorias) {
+            if (ca.equalsIgnoreCase(cate)) {
+                return true;
+            }      
+        }
+        return false;
+    }
+    public void NueCat(String nueCat) { // Añade una nueva categoria
+        categorias.add(nueCat); 
+        System.out.println("Categoría '" + nueCat + "' registrada con éxito.");
+    }
 }
