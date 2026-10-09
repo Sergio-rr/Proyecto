@@ -19,7 +19,8 @@ public class Proyecto{
             System.out.println("2. Listar ");
             System.out.println("3. Buscar ");
             System.out.println("4. Modificar ");
-            System.out.println("5. Eliminar ");
+            System.out.println("5. Movimientos / Alertas de Stock");
+            System.out.println("6. Eliminar");
             System.out.println("0. Salir ");
             System.out.print("\nEliga una opción: ");
 
@@ -318,8 +319,113 @@ public class Proyecto{
                     }   while(mod != 0);
 
                     break;
+                
+                case 5://Movimientos / Alertas de Stock
+                    int opMov;
+                    do {
+                        System.out.println("\n--- MOVIMIENTOS Y ALERTAS DE STOCK ---");
+                        System.out.println("1. Registrar Entrada (+ Reposición)");
+                        System.out.println("2. Registrar Salida (- Venta / Despacho)");
+                        System.out.println("3. Reporte de Alertas (Stock ≤ 5)");
+                        System.out.println("0. Regresar");
+                        System.out.print("\nElija una opción: ");
+                        opMov = scanner.nextInt();
 
-                case 5://Eliminar
+                        switch (opMov) {
+                            case 0: // Regresar al menú principal
+                                break;
+
+                            case 1: // Registrar Entrada (+ Reposición)
+                                System.out.print("\nIngrese el código del componente: ");
+                                cod = scanner.nextInt();
+                                Componentes compEntrada = inventario.buscar(cod);
+
+                                if (compEntrada == null) {
+                                    System.out.println("\nNo se encontró un componente con ese código.");
+                                    break;
+                                }
+
+                                // Mostramos la información actual del componente antes de pedir la cantidad
+                                System.out.println("\nComponente encontrado:");
+                                inventario.info(compEntrada);
+
+                                int stockPrevioEntrada = compEntrada.getCantidad();
+                                System.out.print("\n¿Cuántas unidades ingresan al almacén?: ");
+                                int ing = scanner.nextInt();
+
+                                if (ing <= 0) {
+                                    System.out.println("\nLa cantidad a ingresar debe ser mayor a 0.");
+                                    break;
+                                }
+
+                                inventario.registrarEntrada(cod, ing);
+
+                                System.out.println("\n==================================================");
+                                System.out.println("  ¡ENTRADA REGISTRADA CON ÉXITO!");
+                                System.out.println("  Componente: " + compEntrada.getNombre());
+                                System.out.println("  Stock anterior: " + stockPrevioEntrada + " | Ingreso: +" + ing + " | Stock actual: " + compEntrada.getCantidad());
+                                System.out.println("==================================================");
+                                break;
+
+                            case 2: // Registrar Salida (- Venta / Despacho)
+                                System.out.print("\nIngrese el código del componente: ");
+                                cod = scanner.nextInt();
+                                Componentes compSalida = inventario.buscar(cod);
+
+                                if (compSalida == null) {
+                                    System.out.println("\nNo se encontró un componente con ese código.");
+                                    break;
+                                }
+
+                                // Mostramos la información actual del componente antes de pedir la cantidad
+                                System.out.println("\nComponente encontrado:");
+                                inventario.info(compSalida);
+
+                                int stockPrevioSalida = compSalida.getCantidad();
+                                System.out.print("\n¿Cuántas unidades se van a despachar?: ");
+                                int sal = scanner.nextInt();
+
+                                if (sal <= 0) {
+                                    System.out.println("\nLa cantidad a despachar debe ser mayor a 0.");
+                                    break;
+                                }
+
+                                int nuevoStock = inventario.registrarSalida(cod, sal);
+
+                                if (nuevoStock == -2) {
+                                    System.out.println("\nERROR: No hay stock suficiente para despachar esa cantidad. Stock disponible: " + compSalida.getCantidad());
+                                    break;
+                                }
+
+                                System.out.println("\n==================================================");
+                                System.out.println("  ¡SALIDA REGISTRADA CON ÉXITO!");
+                                System.out.println("  Componente: " + compSalida.getNombre());
+                                System.out.println("  Stock anterior: " + stockPrevioSalida + " | Salida: -" + sal + " | Stock actual: " + nuevoStock);
+                                System.out.println("==================================================");
+
+                                // Alerta automática de stock crítico (<= 5)
+                                if (nuevoStock <= 5) {
+                                    System.out.println("\n**************************************************");
+                                    System.out.println("  ¡ALERTA DE STOCK CRÍTICO!");
+                                    System.out.println("  El componente [" + compSalida.getNombre() + "] ha alcanzado un stock bajo");
+                                    System.out.println("  (Quedan solo " + nuevoStock + " unidades en almacén).");
+                                    System.out.println("  Se requiere reabastecimiento urgente.");
+                                    System.out.println("**************************************************");
+                                }
+                                break;
+
+                            case 3: // Reporte de Alertas (Consulta General ≤ 5)
+                                System.out.println();
+                                inventario.reporteStockMinimo();
+                                break;
+
+                            default:
+                                System.out.println("\nElija una opción válida.");
+                                break;
+                        }
+                    } while (opMov != 0);
+                    break;
+                case 6://Eliminar
 
                     System.out.print("\nIngrese el código del componente a eliminar: ");
                     int del= scanner.nextInt();

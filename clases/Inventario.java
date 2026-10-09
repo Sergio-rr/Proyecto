@@ -168,4 +168,50 @@ public class Inventario {
     }
         
 
+
+    // Registrar entrada de stock (+ Reposición)
+    public boolean registrarEntrada(int codigo, int cantidadIngreso) {
+        Componentes c = buscar(codigo);
+        if (c != null) {
+            c.setCantidad(c.getCantidad() + cantidadIngreso);
+            return true;
+        }
+        return false;
+    }
+
+    // Registrar salida de stock (- Venta / Despacho)
+    // Retorna -1 si el código no existe, -2 si la salida supera el stock actual, o el nuevo stock
+    public int registrarSalida(int codigo, int cantidadSalida) {
+        Componentes c = buscar(codigo);
+        
+        if (cantidadSalida > c.getCantidad()) {
+            return -2; // Stock insuficiente
+        }
+        c.setCantidad(c.getCantidad() - cantidadSalida);
+        return c.getCantidad(); // Retorna el nuevo stock
+    }
+
+    // Generar reporte de componentes en estado crítico (Stock <= 5)
+    public void reporteStockMinimo() {
+        System.out.println("**************************************************");
+        System.out.println("       REPORTE DE COMPONENTES CON STOCK MÍNIMO    ");
+        System.out.println("**************************************************");
+        
+        int contador = 0;
+        for (Componentes c : componentes) {
+            if (c.getCantidad() <= 5) {
+                System.out.println("Código: " + c.getCodigo() + " | Componente: " + c.getNombre() + " | Stock Actual: " + c.getCantidad());
+                contador++;
+            }
+        }
+        
+        if (contador == 0) {
+            System.out.println(" No hay componentes con stock crítico (≤ 5 unidades).");
+        } else {
+            System.out.println("--------------------------------------------------");
+            System.out.println("Total de productos en estado crítico: " + contador);
+        }
+        System.out.println("**************************************************");
+    }
+
 }
