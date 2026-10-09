@@ -1,5 +1,6 @@
 package clases;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Inventario {
@@ -36,10 +37,10 @@ public class Inventario {
     public void info(Componentes c){//Para usarlo en listar y buscar
         System.out.println(
             "Código: " + c.getCodigo() + " | Nombre: " + c.getNombre() +
-            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Nombre: " + c.getCategoria()+ " | Fecha: " + c.getFecha()
+            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Categoria: " + c.getCategoria()+ " | Fecha: " + c.getFecha()
         );
     }
-
+    
     public void listar(){//Muestra todos los componentes
         if (componentes.isEmpty()) {
             System.out.println("No hay componentes registrados.");
@@ -48,6 +49,30 @@ public class Inventario {
         
         System.out.println("\n---LISTA DE COMPONENTES---");
         for (Componentes c : componentes) { info(c); }
+    }
+
+    public void OrdenarCod(){
+        Collections.sort(componentes, (c1, c2) -> Integer.valueOf(c1.getCodigo()).compareTo(c2.getCodigo()));//RF-22
+    }
+
+    public void OrdenarNom(){
+        Collections.sort(componentes, (c1, c2) -> c1.getNombre().compareTo(c2.getNombre()));//RF-23
+    }
+
+    public void OrdenarCat(){
+        Collections.sort(componentes, (c1, c2) -> c1.getCategoria().compareTo(c2.getCategoria()));//RF-24
+    }
+
+    public void OrdenarStock(){
+        Collections.sort(componentes, (c1, c2) -> Integer.valueOf(c1.getCantidad()).compareTo(c2.getCantidad()));//RF-26
+    }
+
+    public void OrdenarPrecio(){
+        Collections.sort(componentes, (c1, c2) -> Double.compare(c1.getPrecio(), c2.getPrecio()));//RF-EXTRA
+    }
+
+    public void OrdenarFecha(){
+        Collections.sort(componentes, (c1, c2) -> c1.getFecha().compareTo(c2.getFecha()));//RF-25
     }
 
     public Componentes buscar(int codigo){ //Busqueda por codigo
@@ -61,19 +86,21 @@ public class Inventario {
 
     public Componentes buscar(String nombre){ //Busqueda por nombre
         for (Componentes n : componentes){
-                if (n.getNombre().equalsIgnoreCase(nombre)){
-                    return n;
-                }
+            if (n.getNombre().equalsIgnoreCase(nombre)){
+                return n;
+            }
         }
         return null;
     }
+    
 
-    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio){
+    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio, String nuevaCategoria){
         Componentes c = buscar(codigo);
         if (c != null) {
             c.setNombre(nuevoNombre);
             c.setCantidad(nuevaCantidad);
             c.setPrecio(nuevoPrecio);
+            c.setCategoria(nuevaCategoria);
             System.out.println("Componente modificado correctamente.");
         } else {
             System.out.println("No se encontró un componente con ese código.");
