@@ -30,63 +30,69 @@ public class Proyecto{
                 case 0://Salir
                     System.out.println("-Saliendo del sistema-");
                     break;
-                case 1://Insertar
-                    System.out.println();             
-                    System.out.print("Codigo: ");
-                    int cod = scanner.nextInt();
-                    
-                    if(inventario.buscar(cod) != null){//Verifica si existe el codigo
-                        System.out.println("\nNo se permiten códigos repetidos");
-                        break;
+                case 1: // Insertar
+                    System.out.println(); 
+                    System.out.print("Codigo: "); 
+                    int cod = scanner.nextInt(); 
+
+                    if(inventario.buscar(cod) != null){ 
+                        System.out.println("\nNo se permiten códigos repetidos"); 
+                        break; 
                     }
 
                     scanner.nextLine();
-
-                    System.out.print("Nombre: ");
+                    System.out.print("Nombre: "); 
                     String nom = scanner.nextLine();
 
-                    if(inventario.buscar(nom) != null){//Verifica si existe el nombre
-                        System.out.println("\nNo se permiten nombres repetidos");
-                        break;
-                    }
-                    
-                    System.out.print("Cantidad: ");
-                    int cant = scanner.nextInt();
-                    if(cant < 0){//Verifica si la cantidad/stock es negativa //RF-38
-                        System.out.println("\nLa cantidad no puede ser negativa");
-                        break;
-                    }
-                    System.out.print("Precio: ");
-                    double precio = scanner.nextDouble();
-                    if(precio <= 0){//Verfica si el precio es <= a cero //RF-39
-                        System.out.println("\nEl precio no puede ser igual o menor a 0");
-                        break;
-                    }
-                    inventario.Mostrarcategorias();//Muestra las categorias
-                    System.out.println(" - '+1': Nueva categoria ");
-                    scanner.nextLine();
-                    System.out.print("\nCategoria: ");
-                    
-                    String categoria = scanner.nextLine();
+                    if(inventario.buscar(nom) != null){ 
+                        System.out.println("\nNo se permiten nombres repetidos"); 
+                        break; 
+                    } 
 
-                    if(categoria.equalsIgnoreCase("+1")){
+                    System.out.print("Cantidad: "); 
+                    int cant = scanner.nextInt(); 
+                    if(cant < 0){ 
+                        System.out.println("\nLa cantidad no puede ser negativa"); 
+                        break; 
+                    } 
 
-                        System.out.println("Ingrese la nueva categoria: ");
-                        String NueCat = scanner.nextLine();
+                    System.out.print("Precio: "); 
+                    double precio = scanner.nextDouble(); 
+                    if(precio <= 0){ 
+                        System.out.println("\nEl precio no puede ser igual o menor a 0"); 
+                        break; 
+                    } 
 
-                        if(inventario.BuscarCat(NueCat)){
-                           System.out.println("La categoria ingresada ya existe"); 
-                           break;
+                    // --- SELECCIÓN POR NÚMERO DIRECTA Y SENCILLA ---
+                    inventario.Mostrarcategorias(); 
+                    System.out.print("\nElija el número de la categoría: "); 
+                    int numCat = scanner.nextInt();
+                    scanner.nextLine(); // Limpiamos el buffer para evitar fallos de lectura
+
+                    String categoria = "";
+
+                    // Si elige 1, 2, 3 o 4 (categorías existentes)
+                    if (numCat >= 1 && numCat <= 4) {
+                        categoria = inventario.getCategoriaPorIndice(numCat);
+                    } 
+                    // Si elige 5 (Crear nueva categoría)
+                    else if (numCat == 5) {
+                        System.out.print("Ingrese la nueva categoría: ");
+                        String nuevaCat = scanner.nextLine();
+
+                        if (inventario.BuscarCat(nuevaCat)) {
+                            System.out.println("La categoría ingresada ya existe.");
+                            break;
                         }
-                        inventario.NueCat(NueCat);
-                        categoria = NueCat;
-                    }
-
-                    else if(!inventario.BuscarCat(categoria)){//Verifica si no existe la categoria
-                        System.out.println("La categoria ingresada no existe");
+                        inventario.NueCat(nuevaCat);
+                        categoria = nuevaCat;
+                    } else {
+                        System.out.println("Opción de categoría no válida.");
                         break;
                     }
-                    inventario.insertar(cod, nom, cant, precio, categoria);
+
+                    // Se guarda en el inventario normalmente
+                    inventario.insertar(cod, nom, cant, precio, categoria); 
                     break;
             
                 case 2://Listar
@@ -128,54 +134,68 @@ public class Proyecto{
                     }     
                     break;
 
-                case 3://Buscar
+                case 3: // Buscar
                     int op;
-                    do{                  
-                    System.out.println("\n---BÚSQUEDA---");
-                    System.out.println("\n1. Por código");
-                    System.out.println("2. Por nombre");
-                    System.out.println("0. Regresar");                    
-                    System.out.print("\nElija una opción: ");
-                    op = scanner.nextInt();
+                    do {
+                        System.out.println("\n--- BÚSQUEDA ---");
+                        System.out.println("1. Por código");
+                        System.out.println("2. Por nombre");
+                        System.out.println("3. Por categoría");
+                        System.out.println("0. Regresar");
+                        System.out.print("\nElija una opción: ");
+                        op = scanner.nextInt();
 
-                        
-                    switch (op){
-                        case 0:
-                            break;
-                        case 1:
-                            System.out.print("\nIngrese el código del componente: ");
-                            cod = scanner.nextInt();
-                            Componentes b = inventario.buscar(cod);
-
-                            if(b == null){
-                                System.out.println("\nNo se encontró un componente con ese código.");
+                        switch (op) {
+                            case 0:
                                 break;
-                            }
-                            System.out.println("\nComponente encontrado: ");
-                            inventario.info(b);
-                            break;
 
-                        case 2:
-                            scanner.nextLine();
-                            System.out.print("\nIngrese el nombre del componente: ");
-                            nom = scanner.nextLine();
-                            Componentes n = inventario.buscar(nom);
+                            case 1: // Búsqueda por código
+                                System.out.print("\nIngrese el código del componente: ");
+                                cod = scanner.nextInt();
+                                Componentes b = inventario.buscar(cod);
 
-                            if(n == null){
-                                System.out.println("\nNo se encontró un componente con ese nombre.");
+                                if (b == null) {
+                                    System.out.println("\nNo se encontró un componente con ese código.");
+                                    break;
+                                }
+                                System.out.println("\nComponente encontrado: ");
+                                inventario.info(b);
                                 break;
-                            }
-                            System.out.println("\nComponente encontrado: ");
-                            inventario.info(n);
 
-                            nom = scanner.nextLine();
-                            break;
-                          
-                        default:
-                            System.out.print("\nElija una opcion valida\n");
-                            break;
+                            case 2: // Búsqueda por nombre
+                                scanner.nextLine();
+                                System.out.print("\nIngrese el nombre del componente: ");
+                                nom = scanner.nextLine();
+                                Componentes n = inventario.buscar(nom);
+
+                                if (n == null) {
+                                    System.out.println("\nNo se encontró un componente con ese nombre.");
+                                    break;
+                                }
+                                System.out.println("\nComponente encontrado: ");
+                                inventario.info(n);
+                                break;
+
+                            case 3: // Búsqueda por categoría
+                                inventario.Mostrarcategorias();
+                                System.out.print("\nSeleccione el número de categoría a buscar: ");
+                                int numCatBusqueda = scanner.nextInt();
+                                scanner.nextLine(); // Limpiar el buffer
+
+                                String catBusqueda = inventario.getCategoriaPorIndice(numCatBusqueda);
+
+                                if (catBusqueda != null) {
+                                    inventario.buscarPorCategoria(catBusqueda);
+                                } else {
+                                    System.out.println("Opción de categoría no válida.");
+                                }
+                                break;
+
+                            default:
+                                System.out.print("\nElija una opción válida\n");
+                                break;
                         }
-                    }   while(op != 0);
+                    } while (op != 0);
                     break;
 
                 case 4://Modificar
@@ -235,41 +255,69 @@ public class Proyecto{
                                         b.setPrecio(precio);
                                         System.out.println("\nPrecio modificado correctamente.");
                                         break;
-                                    case 4://Modificacion individual de la categoria
-                                        scanner.nextLine();
+                                    case 4: // Modificación individual de categoría por número
                                         inventario.Mostrarcategorias();
-                                        System.out.print("Ingrese la nueva categoria: ");
-                                        categoria = scanner.nextLine();
+                                        System.out.print("\nSeleccione el número de la nueva categoría: ");
+                                        int opCatMod = scanner.nextInt();
+                                        scanner.nextLine(); // Limpiar el búfer
 
-                                        if(!inventario.BuscarCat(categoria)){
-                                            System.out.println("La categoria ingresada no existe"); 
-                                            break;
+                                        if (opCatMod >= 1 && opCatMod <= 4) {
+                                            categoria = inventario.getCategoriaPorIndice(opCatMod);
+                                            b.setCategoria(categoria);
+                                            System.out.println("\nCategoría modificada correctamente.");
+                                        } else if (opCatMod == 5) {
+                                            System.out.print("Ingrese la nueva categoría: ");
+                                            String nuevaCat = scanner.nextLine().trim();
+                                            if (inventario.BuscarCat(nuevaCat)) {
+                                                System.out.println("La categoría ingresada ya existe.");
+                                                break;
+                                            }
+                                            inventario.NueCat(nuevaCat);
+                                            b.setCategoria(nuevaCat);
+                                            System.out.println("\nCategoría modificada correctamente.");
+                                        } else {
+                                            System.out.println("Opción no válida.");
                                         }
-                                        b.setCategoria(categoria);
                                         break;
                                     case 5:
-                                        scanner.nextLine();
-                                        System.out.print("Ingrese el nuevo nombre: ");
-                                        nom = scanner.nextLine();
-                                        if(inventario.buscar(nom) != null){
+                                        scanner.nextLine(); 
+                                        System.out.print("Ingrese el nuevo nombre: "); 
+                                        nom = scanner.nextLine(); 
+
+                                        if(inventario.buscar(nom) != null && !b.getNombre().equalsIgnoreCase(nom)){ 
                                             System.out.println("Ya existe un componente con ese nombre"); 
+                                            break; 
+                                        } 
+
+                                        System.out.print("Ingrese la nueva cantidad: "); 
+                                        cant = scanner.nextInt(); 
+
+                                        System.out.print("Ingrese el nuevo precio: "); 
+                                        precio = scanner.nextDouble(); 
+
+                                        // Selección por NÚMERO en la modificación total
+                                        inventario.Mostrarcategorias(); 
+                                        System.out.print("\nSeleccione el número de la nueva categoría: "); 
+                                        int opCatTodo = scanner.nextInt();
+                                        scanner.nextLine(); // Limpiar el buffer
+
+                                        if (opCatTodo >= 1 && opCatTodo <= 4) {
+                                            categoria = inventario.getCategoriaPorIndice(opCatTodo);
+                                        } else if (opCatTodo == 5) {
+                                            System.out.print("Ingrese la nueva categoría: ");
+                                            String nuevaCat = scanner.nextLine().trim();
+                                            if (inventario.BuscarCat(nuevaCat)) {
+                                                System.out.println("La categoría ingresada ya existe");
+                                                break;
+                                            }
+                                            inventario.NueCat(nuevaCat);
+                                            categoria = nuevaCat;
+                                        } else {
+                                            System.out.println("Opción de categoría no válida.");
                                             break;
                                         }
-                                        System.out.print("Ingrese la nueva cantidad: ");
-                                        cant = scanner.nextInt();
-                                        System.out.print("Ingrese el nuevo precio: ");
-                                        precio = scanner.nextDouble();
-                                        scanner.nextLine();
-                                        inventario.Mostrarcategorias();
-                                        System.out.print("Ingrese la nueva categoria: ");//Modificacion de categoria
-                                        categoria = scanner.nextLine();
 
-                                        if(!inventario.BuscarCat(categoria)){//Verifica si la categoria no existe
-                                            System.out.println("Debe ingresar una categoria existente"); 
-                                            break;
-                                        }
-
-                                        inventario.modificar(cod, nom, cant, precio, categoria);
+                                        inventario.modificar(cod, nom, cant, precio, categoria); 
                                         break;
                                     case 0:
                                         System.out.println("\nRegresando al menú principal.");

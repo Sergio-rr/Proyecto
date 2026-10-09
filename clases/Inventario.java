@@ -1,4 +1,5 @@
 package clases;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -35,9 +36,13 @@ public class Inventario {
     }
 
     public void info(Componentes c){//Para usarlo en listar y buscar
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fechaFormateada = c.getFecha().format(formato);
+
         System.out.println(
             "Código: " + c.getCodigo() + " | Nombre: " + c.getNombre() +
-            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Categoria: " + c.getCategoria()+ " | Fecha: " + c.getFecha()
+            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Categoria: " + c.getCategoria()+ " | Fecha: " + fechaFormateada
         );
     }
     
@@ -92,7 +97,20 @@ public class Inventario {
         }
         return null;
     }
-    
+
+    public void buscarPorCategoria(String categoria) { //Busqueda por categoria
+    boolean encontrado = false;
+    System.out.println("\n--- COMPONENTES EN LA CATEGORÍA: " + categoria.toUpperCase() + " ---");
+    for (Componentes c : componentes) {
+        if (c.getCategoria().equalsIgnoreCase(categoria)) {
+            info(c);
+            encontrado = true;
+        }
+    }
+    if (!encontrado) {
+        System.out.println("No se encontraron componentes en esta categoría.");
+    }
+}
 
     public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio, String nuevaCategoria){
         Componentes c = buscar(codigo);
@@ -116,14 +134,16 @@ public class Inventario {
         }
     }
 
-    public void Mostrarcategorias(){//Muestra las categorias disponibles
+    public void Mostrarcategorias() {
         if (categorias.isEmpty()) {
-        System.out.println("No hay categorias registradas.");
-        return;
+            System.out.println("No hay categorías registradas.");
+            return;
         }
-        System.out.println("\n---CATEGORIAS---");
-        for (String ca : categorias) {System.out.println(" - " + ca);
+        System.out.println("\n--- CATEGORÍAS DISPONIBLES ---");
+        for (int i = 0; i < categorias.size(); i++) {
+            System.out.println((i + 1) + ". " + categorias.get(i));
         }
+        System.out.println((categorias.size() + 1) + ". [ + Crear nueva categoría ]");
     }
 
     public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
@@ -138,4 +158,14 @@ public class Inventario {
         categorias.add(nueCat); 
         System.out.println("Categoría '" + nueCat + "' registrada con éxito.");
     }
+        
+    // Obtiene el nombre de la categoría según el número ingresado (1, 2, 3, etc.)
+    public String getCategoriaPorIndice(int indice) {
+        if (indice >= 1 && indice <= categorias.size()) {
+            return categorias.get(indice - 1);
+        }
+        return null;
+    }
+        
+
 }
