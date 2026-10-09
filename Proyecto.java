@@ -106,32 +106,19 @@ public class Proyecto{
                     System.out.print("\nElija una opción: " );
                     int opc = scanner.nextInt();
 
-                    switch (opc) {
-                        case 1:
-                            inventario.OrdenarCod();
-                            break;
-                        case 2:
-                            inventario.OrdenarNom();
-                            break;
-                        case 3:
-                            inventario.OrdenarCat();
-                            break;
-                        case 4:
-                            inventario.OrdenarStock();
-                            break;
-                        case 5:
-                            inventario.OrdenarPrecio();
-                            break;
-                        case 6:
-                            inventario.OrdenarFecha();
-                            break;   
-                        default:
-                            System.out.println("Ingrese una opcion valida");
-                            break;
-                    }
-                    if(opc >0 || opc < 7){
+                    if (opc >= 1 && opc <= 6) {
+                        switch (opc) {
+                            case 1: inventario.OrdenarCod(); break;
+                            case 2: inventario.OrdenarNom(); break;
+                            case 3: inventario.OrdenarCat(); break;
+                            case 4: inventario.OrdenarStock(); break;
+                            case 5: inventario.OrdenarPrecio(); break;
+                            case 6: inventario.OrdenarFecha(); break;
+                        }
                         inventario.listar();
-                    }     
+                    } else {
+                        System.out.println("\nERROR: Opción no válida. Debe ingresar un número entre 1 y 6.");
+                    }
                     break;
 
                 case 3: // Buscar
