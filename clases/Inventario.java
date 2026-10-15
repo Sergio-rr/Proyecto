@@ -19,20 +19,22 @@ public class Inventario {
        Scanner sc = new Scanner(System.in);
 
        while(true){
-        try{
-            if (nom.matches(".*\\d.*")){
-                throw new IllegalArgumentException("El nombre no puede contener números.");
+            try{
+                if (nom.matches(".*\\d.*")){
+                    throw new IllegalArgumentException("El nombre no puede contener números.");
+                }
+                Componentes c = new Componentes(nom, cod, cant, precio, cat);
+                componentes.add(c);
+                guardarBloc(c);//Envia el componente al metodo para guardarlo en el bloc de notas
+
+                System.out.println("Componente registrado y guardado correctamente.");
+                break;
+            }catch (IllegalArgumentException e){
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("Ingrese un nombre válido");
+                nom = sc.nextLine();
             }
-            
-        componentes.add(new Componentes(nom, cod, cant, precio, cat));
-        System.out.println("Componente registrado correctamente.");
-        break;
-        }catch (IllegalArgumentException e){
-            System.out.println("Error: " + e.getMessage());
-            System.out.println("Ingrese un nombre válido");
-            nom = sc.nextLine();
         }
-    }
     }
 
     public void info(Componentes c){//Para usarlo en listar y buscar
@@ -214,4 +216,29 @@ public class Inventario {
         System.out.println("**************************************************");
     }
 
+    public void guardarBloc(Componentes c){
+
+        String rutaArchivo = "Proyecto/Inventario.txt";//Ruta del archivo
+
+        //Abre el archivo "sin borrar lo que esta escrito"(True)
+        try (java.io.FileWriter ruta = new java.io.FileWriter(rutaArchivo, true);//El 'true' activa el modo "agregar al final"
+            java.io.BufferedWriter bw = new java.io.BufferedWriter(ruta);//Escribe/almacena en bufer
+            java.io.PrintWriter esc = new java.io.PrintWriter(bw)){//Imprime renglon por renglon en el bloc de notas
+                                                
+            esc.println(c.getCodigo() + ", " + c.getNombre() + ", " + c.getCantidad() + 
+            ", " + c.getPrecio() + ", " + c.getCategoria() + ", " + c.getFecha());
+    
+        } catch (java.io.IOException e) {//Captura errores de Entrada/Salida (I/O) relacionados con el archivo
+            System.out.println("Error al guardar el componente en el archivo: " + e.getMessage());
+        }
+    }
+
+    /*public void guardarCategoria(){
+
+    }*/
+    /*public void cargarBloc(){
+        java.io.File bloc = new java.io.File("Inventario.txt");
+
+        
+    }*/
 }

@@ -92,8 +92,8 @@ public class Proyecto{
                         break;
                     }
 
-                    // Se guarda en el inventario normalmente
                     inventario.insertar(cod, nom, cant, precio, categoria); 
+
                     break;
             
                 case 2://Listar
