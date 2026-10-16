@@ -1,0 +1,7 @@
+2026-10-16;INSERTAR;N/A;109;Modulo Display LCD 16x2;Registro inicial de producto
+2026-10-16;MODIFICAR;PRECIO;109;Modulo Display LCD 16x2;Precio actualizado a: 28.5
+2026-10-16;SALIDA;CANTIDAD;109;Modulo Display LCD 16x2;Despacho de 10 unidades (Stock restante: 5)
+2026-10-16;INSERTAR;N/A;110;Modulo Bluetooth HC-05;N/A;10;Registro inicial de producto
+2026-10-16;MODIFICAR;PRECIO;110;Modulo Bluetooth HC-05;18.5;23.8;Actualizacion de precio
+2026-10-16;ENTRADA;CANTIDAD;110;Modulo Bluetooth HC-05;10;25;Ingreso de 15 unidades
+2026-10-16;SALIDA;CANTIDAD;110;Modulo Bluetooth HC-05;25;5;Despacho de 20 unidades

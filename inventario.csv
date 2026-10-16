@@ -5,3 +5,6 @@
 105;Modulo Display OLED 0.96 I2C;3;22.0;Sensores;2026-10-16
 106;Modelo Bluetooth;8;18.5;Sensores;2026-10-16
 107;Modulo Wifi ESP8266;12;15.5;Microcontroladores;2026-10-16
+108;Modulo Rele 5V 2 Canales;20;12.5;Sensores;2026-10-16
+109;Modulo Display LCD 16x2;5;28.5;Microcontroladores;2026-10-16
+110;Modulo Bluetooth HC-05;5;23.8;Microcontroladores;2026-10-16

@@ -234,45 +234,75 @@ public class Proyecto{
                                         scanner.nextLine();
                                         System.out.print("Ingrese el nuevo nombre: ");
                                         nom = scanner.nextLine();
+
+                                        String nombreAnterior = b.getNombre(); // Guardar antes de set
                                         b.setNombre(nom);
-                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
+                                        GestorArchivos.guardarEnArchivo(inventario);
+
+                                        GestorArchivos.registrarHistorial("MODIFICAR", "NOMBRE", b.getCodigo(), b.getNombre(), nombreAnterior, nom, "Cambio de nombre del componente");
                                         System.out.println("\nNombre modificado correctamente.");
                                         break;
                                     case 2:
                                         System.out.print("Ingrese la nueva cantidad: ");
                                         cant = scanner.nextInt();
+
+                                        String cantAnterior = String.valueOf(b.getCantidad()); // Guardar antes de set
                                         b.setCantidad(cant);
-                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
+                                        GestorArchivos.guardarEnArchivo(inventario);
+
+                                        GestorArchivos.registrarHistorial("MODIFICAR", "CANTIDAD", b.getCodigo(), b.getNombre(), cantAnterior, String.valueOf(cant), "Ajuste directo de stock");
                                         System.out.println("\nCantidad modificada correctamente.");
                                         break;
                                     case 3:
                                         System.out.print("Ingrese el nuevo precio: ");
                                         precio = scanner.nextDouble();
+
+                                        String precioAnterior = String.valueOf(b.getPrecio()); // Guardar antes de set
                                         b.setPrecio(precio);
-                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
+                                        GestorArchivos.guardarEnArchivo(inventario);
+
+                                        GestorArchivos.registrarHistorial("MODIFICAR", "PRECIO", b.getCodigo(), b.getNombre(), precioAnterior, String.valueOf(precio), "Actualizacion de precio");
                                         System.out.println("\nPrecio modificado correctamente.");
                                         break;
                                     case 4: // Modificación individual de categoría por número
+                                        scanner.nextLine();
                                         inventario.Mostrarcategorias();
                                         System.out.print("\nSeleccione el número de la nueva categoría: ");
                                         int opCatMod = scanner.nextInt();
                                         scanner.nextLine(); // Limpiar el búfer
 
+                                        String catAnterior = b.getCategoria(); // 1. Guardar categoría previa
+
                                         if (opCatMod >= 1 && opCatMod <= 4) {
                                             categoria = inventario.getCategoriaPorIndice(opCatMod);
-                                            b.setCategoria(categoria);
-                                            GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
+                                            b.setCategoria(categoria); // 2. Modifica SOLO la categoría
+
+                                            GestorArchivos.guardarEnArchivo(inventario);
+                                            GestorArchivos.registrarHistorial(
+                                                "MODIFICAR", "CATEGORIA", b.getCodigo(), b.getNombre(), 
+                                                catAnterior, categoria, "Reclasificación de categoría"
+                                            );
                                             System.out.println("\nCategoría modificada correctamente.");
+
                                         } else if (opCatMod == 5) {
                                             System.out.print("Ingrese la nueva categoría: ");
                                             String nuevaCat = scanner.nextLine().trim();
+
                                             if (inventario.BuscarCat(nuevaCat)) {
                                                 System.out.println("La categoría ingresada ya existe.");
                                                 break;
                                             }
+
                                             inventario.NueCat(nuevaCat);
-                                            b.setCategoria(nuevaCat);
+                                            b.setCategoria(nuevaCat); // Modifica SOLO la categoría
+
+                                            GestorArchivos.guardarEnArchivo(inventario);
+                                            GestorArchivos.registrarHistorial(
+                                                "MODIFICAR", "CATEGORIA", b.getCodigo(), b.getNombre(), 
+                                                catAnterior, nuevaCat, "Creación y asignación de nueva categoría"
+                                            );
                                             System.out.println("\nCategoría modificada correctamente.");
+
                                         } else {
                                             System.out.println("Opción no válida.");
                                         }
@@ -441,22 +471,21 @@ public class Proyecto{
                     int del= scanner.nextInt();
                     Componentes d = inventario.buscar(del);
                     inventario.info(d);
-                    System.out.print("Esta seguro que desea eliminar este componente?(S/N):");//Confirmacion de eliminacion //RF-15
+                    System.out.print("Esta seguro que desea eliminar este componente?(S/N):");//Confirmacion de eliminacion 
                         
                     scanner.nextLine();
                     String conf = scanner.nextLine();
 
                     if("s".equalsIgnoreCase(conf)){
                     inventario.eliminar(d);
-                        System.out.println("Se elimino correctamente el componente");
                         break;
                     }
                     else if("n".equalsIgnoreCase(conf)){
-                        System.out.println("Se cancelo la eliminación del componente");
+                        System.out.println("Se cancelo la eliminacion del componente");
                         break;
                     }
                     else{
-                        System.out.println("Ingrese ua opción valida");
+                        System.out.println("Ingrese una opcion valida");
                     }
                     break;
 
@@ -466,7 +495,7 @@ public class Proyecto{
             }
         }
             catch (InputMismatchException e){
-                System.out.println("\nERROR: Debe ingresar un número.");
+                System.out.println("\nERROR: Debe ingresar un numero.");
                 scanner.nextLine();
                 opcion = -1;
             }

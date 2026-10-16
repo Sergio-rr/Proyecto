@@ -68,4 +68,36 @@ public class GestorArchivos {
             System.out.println("Error al cargar el archivo de datos: " + e.getMessage());
         }
     }
+
+
+    private static final String ARCHIVO_HISTORIAL = "historial.csv";
+
+    // Método para registrar cada evento en el historial
+    public static void registrarHistorial(String accion, String campoAfectado, int codComp, String nomComp, String valorAnterior, String valorNuevo, String detalle) {
+        File archivo = new File(ARCHIVO_HISTORIAL);
+        boolean existe = archivo.exists();
+
+        try (FileWriter fw = new FileWriter(archivo, true);
+            PrintWriter pw = new PrintWriter(fw)) {
+
+            // Si el archivo es nuevo, creamos primero la cabecera completa de 8 columnas
+            if (!existe || archivo.length() == 0) {
+                pw.println("FECHA_HORA;ACCION;CAMPO_AFECTADO;COD_COMP;NOMBRE_COMP;VALOR_ANTERIOR;VALOR_NUEVO;DETALLE");
+            }
+
+            String fechaActual = LocalDateTime.now().format(FORMATO_FECHA);
+            
+            pw.println(fechaActual + ";" + 
+                    accion + ";" + 
+                    campoAfectado + ";" + 
+                    codComp + ";" + 
+                    nomComp + ";" + 
+                    valorAnterior + ";" + 
+                    valorNuevo + ";" + 
+                    detalle);
+
+        } catch (Exception e) {
+            System.out.println("Error al escribir en el historial: " + e.getMessage());
+        }
+    }
 }
