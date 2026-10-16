@@ -3,26 +3,28 @@ package clases;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class GestorArchivos {
 
     private static final String NOMBRE_ARCHIVO = "inventario.csv";
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // 1. Método para GUARDAR todos los componentes en el archivo CSV
     public static void guardarEnArchivo(Inventario inventario) {
-        try (FileWriter fw = new FileWriter(NOMBRE_ARCHIVO, false); // false = sobrescribe el archivo con los datos actualizados
+        try (FileWriter fw = new FileWriter(NOMBRE_ARCHIVO, false);
              PrintWriter pw = new PrintWriter(fw)) {
 
-            // Escribimos cada componente en una línea formateada con punto y coma (;)
             for (Componentes c : inventario.getComponentes()) {
                 pw.println(c.getCodigo() + ";" + 
                            c.getNombre() + ";" + 
                            c.getCantidad() + ";" + 
                            c.getPrecio() + ";" + 
                            c.getCategoria() + ";" + 
-                           c.getFecha());
+                           c.getFecha().format(FORMATO_FECHA)); // Formato yyyy-MM-dd
             }
 
         } catch (Exception e) {
@@ -30,11 +32,10 @@ public class GestorArchivos {
         }
     }
 
-    // 2. Método para CARGAR los componentes desde el archivo CSV al iniciar el programa
+    // 2. Método para CARGAR los componentes desde el archivo CSV al iniciar
     public static void cargarDesdeArchivo(Inventario inventario) {
         File archivo = new File(NOMBRE_ARCHIVO);
 
-        // Si el archivo no existe aún (primera vez que corre el programa), se crea solo
         if (!archivo.exists()) {
             return;
         }
@@ -44,7 +45,6 @@ public class GestorArchivos {
                 String linea = lector.nextLine().trim();
                 if (linea.isEmpty()) continue;
 
-                // Separamos los atributos por el punto y coma (;)
                 String[] datos = linea.split(";");
 
                 if (datos.length == 6) {
@@ -53,13 +53,14 @@ public class GestorArchivos {
                     int cantidad = Integer.parseInt(datos[2]);
                     double precio = Double.parseDouble(datos[3]);
                     String categoria = datos[4];
-                    LocalDateTime fecha = LocalDateTime.parse(datos[5]);
+                    
+                    // Parseamos solo la fecha yyyy-MM-dd
+                    LocalDate fechaCorta = LocalDate.parse(datos[5], FORMATO_FECHA);
+                    LocalDateTime fecha = fechaCorta.atStartOfDay();
 
-                    // Recreamos el objeto componente
                     Componentes comp = new Componentes(nombre, codigo, cantidad, precio, categoria);
-                    comp.setFecha(fecha); // Preservamos la fecha original guardada
+                    comp.setFecha(fecha);
 
-                    // Lo insertamos directamente al ArrayList
                     inventario.getComponentes().add(comp);
                 }
             }
