@@ -20,8 +20,8 @@ public class Inventario {
 
        while(true){
         try{
-            if (nom.matches(".*\\d.*")){
-                throw new IllegalArgumentException("El nombre no puede contener números.");
+            if (nom.matches("^\\d+$")) {
+            throw new IllegalArgumentException("El nombre no puede estar compuesto únicamente por números.");
             }
             
         componentes.add(new Componentes(nom, cod, cant, precio, cat));
