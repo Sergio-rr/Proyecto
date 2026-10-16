@@ -214,4 +214,9 @@ public class Inventario {
         System.out.println("**************************************************");
     }
 
+    // Método getter para permitir al GestorArchivos acceder a la lista
+    public ArrayList<Componentes> getComponentes() {
+        return componentes;
+    }
+
 }

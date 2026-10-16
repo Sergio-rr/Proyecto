@@ -1,4 +1,5 @@
 import clases.Componentes;
+import clases.GestorArchivos;
 import clases.Inventario;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -9,6 +10,8 @@ public class Proyecto{
 
         Scanner scanner = new Scanner(System.in);
         Inventario inventario = new Inventario();
+        // Carga inicial automática desde el archivo inventario.csv
+        GestorArchivos.cargarDesdeArchivo(inventario);
         int opcion;
 
         do{
@@ -29,8 +32,11 @@ public class Proyecto{
 
             switch (opcion) {
                 case 0://Salir
-                    System.out.println("-Saliendo del sistema-");
-                    break;
+                GestorArchivos.guardarEnArchivo(inventario);
+                System.out.println("\n[DATOS GUARDADOS EN inventario.csv]");
+                System.out.println("-Saliendo del sistema-");
+                break;
+                    
                 case 1: // Insertar
                     System.out.println(); 
                     System.out.print("Codigo: "); 
