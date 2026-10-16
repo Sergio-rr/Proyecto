@@ -235,18 +235,21 @@ public class Proyecto{
                                         System.out.print("Ingrese el nuevo nombre: ");
                                         nom = scanner.nextLine();
                                         b.setNombre(nom);
+                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
                                         System.out.println("\nNombre modificado correctamente.");
                                         break;
                                     case 2:
                                         System.out.print("Ingrese la nueva cantidad: ");
                                         cant = scanner.nextInt();
                                         b.setCantidad(cant);
+                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
                                         System.out.println("\nCantidad modificada correctamente.");
                                         break;
                                     case 3:
                                         System.out.print("Ingrese el nuevo precio: ");
                                         precio = scanner.nextDouble();
                                         b.setPrecio(precio);
+                                        GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
                                         System.out.println("\nPrecio modificado correctamente.");
                                         break;
                                     case 4: // Modificación individual de categoría por número
@@ -258,6 +261,7 @@ public class Proyecto{
                                         if (opCatMod >= 1 && opCatMod <= 4) {
                                             categoria = inventario.getCategoriaPorIndice(opCatMod);
                                             b.setCategoria(categoria);
+                                            GestorArchivos.guardarEnArchivo(inventario); // <-- Guardar
                                             System.out.println("\nCategoría modificada correctamente.");
                                         } else if (opCatMod == 5) {
                                             System.out.print("Ingrese la nueva categoría: ");

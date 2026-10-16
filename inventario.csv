@@ -1,3 +1,5 @@
-1;awaw;4;54.0;Sensores;2026-10-15T21:00:39.579912800
-45;ewewweeweweewewew;6;98.0;Sensores;2026-10-15T21:00:54.847769200
-3443;sdsdffgv;45465;34.0;Componentes Pasivos;2026-10-15T21:03:40.167400100
+101;Placa de Desarrollo ESP32;15;28.5;Microcontroladores;2026-10-16T10:15:30
+102;Sensor Ultrasonico HC-SR04;4;12.0;Sensores;2026-10-16T10:20
+103;Resistencia 10k Ohm 1/4W;120;0.5;Componentes Pasivos;2026-10-16T10:25
+104;Transistor NPN 2N2222;45;1.5;Semiconductores;2026-10-16T10:30
+105;Modulo Display OLED 0.96 I2C;3;22.0;Sensores;2026-10-16T10:35
