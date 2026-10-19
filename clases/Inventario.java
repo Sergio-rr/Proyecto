@@ -20,11 +20,13 @@ public class Inventario {
 
        while(true){
         try{
-            if (nom.matches(".*\\d.*")){
-                throw new IllegalArgumentException("El nombre no puede contener números.");
+            if (nom.matches("^\\d+$")) {
+            throw new IllegalArgumentException("El nombre no puede estar compuesto únicamente por números.");
             }
             
         componentes.add(new Componentes(nom, cod, cant, precio, cat));
+        GestorArchivos.guardarEnArchivo(this); // <-- AUTO-GUARDADO
+        GestorArchivos.registrarHistorial("INSERTAR", "N/A", cod, nom, "N/A", String.valueOf(cant), "Registro inicial de producto");
         System.out.println("Componente registrado correctamente.");
         break;
         }catch (IllegalArgumentException e){
@@ -119,6 +121,7 @@ public class Inventario {
             c.setCantidad(nuevaCantidad);
             c.setPrecio(nuevoPrecio);
             c.setCategoria(nuevaCategoria);
+            GestorArchivos.guardarEnArchivo(this); // <-- AUTO-GUARDADO
             System.out.println("Componente modificado correctamente.");
         } else {
             System.out.println("No se encontró un componente con ese código.");
@@ -128,6 +131,8 @@ public class Inventario {
     public void eliminar(Componentes c){
         if (c != null) {
             componentes.remove(c);
+            GestorArchivos.guardarEnArchivo(this); // <-- AUTO-GUARDADO
+            GestorArchivos.registrarHistorial("ELIMINAR", "N/A", c.getCodigo(), c.getNombre(), String.valueOf(c.getCantidad()), "0", "Producto eliminado del sistema");
             System.out.println("Componente eliminado correctamente.");
         } else {
             System.out.println("No se encontró un componente con ese código.");
@@ -173,21 +178,60 @@ public class Inventario {
     public boolean registrarEntrada(int codigo, int cantidadIngreso) {
         Componentes c = buscar(codigo);
         if (c != null) {
-            c.setCantidad(c.getCantidad() + cantidadIngreso);
+            // 1. Guardamos el stock previo antes de aumentar
+            int stockAnterior = c.getCantidad();
+
+            // 2. Modificamos la cantidad
+            c.setCantidad(stockAnterior + cantidadIngreso);
+
+            // 3. Auto-guardado en el CSV del inventario
+            GestorArchivos.guardarEnArchivo(this);
+
+            // 4. Registro en el Historial con VALOR_ANTERIOR y VALOR_NUEVO
+            GestorArchivos.registrarHistorial(
+                "ENTRADA",
+                "CANTIDAD",
+                c.getCodigo(),
+                c.getNombre(),
+                String.valueOf(stockAnterior),            // VALOR_ANTERIOR (ej: "10")
+                String.valueOf(c.getCantidad()),           // VALOR_NUEVO (ej: "25")
+                "Ingreso de " + cantidadIngreso + " unidades" // DETALLE
+            );
+
             return true;
         }
         return false;
     }
 
     // Registrar salida de stock (- Venta / Despacho)
-    // Retorna -1 si el código no existe, -2 si la salida supera el stock actual, o el nuevo stock
+    // Retorna -2 si la salida supera el stock actual, o el nuevo stock
     public int registrarSalida(int codigo, int cantidadSalida) {
         Componentes c = buscar(codigo);
-        
+
         if (cantidadSalida > c.getCantidad()) {
             return -2; // Stock insuficiente
         }
-        c.setCantidad(c.getCantidad() - cantidadSalida);
+
+        // 1. Guardamos el stock anterior antes de restarle la salida
+        int stockAnterior = c.getCantidad();
+
+        // 2. Modificamos el stock
+        c.setCantidad(stockAnterior - cantidadSalida);
+
+        // 3. Auto-guardado en el CSV principal
+        GestorArchivos.guardarEnArchivo(this);
+
+        // 4. Registro en el Historial con VALOR_ANTERIOR y VALOR_NUEVO
+        GestorArchivos.registrarHistorial(
+            "SALIDA", 
+            "CANTIDAD", 
+            c.getCodigo(), 
+            c.getNombre(), 
+            String.valueOf(stockAnterior),            // VALOR_ANTERIOR
+            String.valueOf(c.getCantidad()),           // VALOR_NUEVO 
+            "Despacho de " + cantidadSalida + " unidades" // DETALLE
+        );
+
         return c.getCantidad(); // Retorna el nuevo stock
     }
 
@@ -212,6 +256,11 @@ public class Inventario {
             System.out.println("Total de productos en estado crítico: " + contador);
         }
         System.out.println("**************************************************");
+    }
+
+    // Método getter para permitir al GestorArchivos acceder a la lista
+    public ArrayList<Componentes> getComponentes() {
+        return componentes;
     }
 
 }
