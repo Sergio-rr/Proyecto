@@ -9,55 +9,76 @@ public class Inventario {
     private ArrayList<Componentes> componentes = new ArrayList<>();
     private ArrayList<String> categorias = new ArrayList<>();
 
+    
     public Inventario() {
-        categorias.add("Microcontroladores");
-        categorias.add("Sensores");
-        categorias.add("Componentes Pasivos");
-        categorias.add("Semiconductores");
-    }
-    public void insertar(int cod, String nom, int cant, double precio, String cat){
-       Scanner sc = new Scanner(System.in);
-
-       while(true){
-        try{
-            if (nom.matches("^\\d+$")) {
-            throw new IllegalArgumentException("El nombre no puede estar compuesto únicamente por números.");
-            }
+        GestorArchivos.cargarCategorias(this);
+        
+        if(categorias.isEmpty()){
+            categorias.add("Microcontroladores");
+            categorias.add("Sensores");
+            categorias.add("Componentes Pasivos");
+            categorias.add("Semiconductores");
             
-        componentes.add(new Componentes(nom, cod, cant, precio, cat));
-        GestorArchivos.guardarEnArchivo(this); // <-- AUTO-GUARDADO
-        GestorArchivos.registrarHistorial("INSERTAR", "N/A", cod, nom, "N/A", String.valueOf(cant), "Registro inicial de producto");
-        System.out.println("Componente registrado correctamente.");
-        break;
-        }catch (IllegalArgumentException e){
-            System.out.println("Error: " + e.getMessage());
-            System.out.println("Ingrese un nombre válido");
-            nom = sc.nextLine();
+            GestorArchivos.guardarCat(this);
         }
-    }
-    }
-
-    public void info(Componentes c){//Para usarlo en listar y buscar
-
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String fechaFormateada = c.getFecha().format(formato);
-
-        System.out.println(
-            "Código: " + c.getCodigo() + " | Nombre: " + c.getNombre() +
-            " | Cantidad: " + c.getCantidad() + " | Precio: S/ " + c.getPrecio() + " | Categoria: " + c.getCategoria()+ " | Fecha: " + fechaFormateada
-        );
     }
     
-    public void listar(){//Muestra todos los componentes
-        if (componentes.isEmpty()) {
-            System.out.println("No hay componentes registrados.");
-            return;
-        }
+    public ArrayList<String> getCategoria(){
+        return categorias;
+    }
+    
+    public void insertar(int cod, String nom, int cant, double precio, String cat){
+       // Validamos si el nombre está compuesto únicamente por números
+        if (cod <= 0) {throw new IllegalArgumentException("El código debe ser un número entero positivo.");}
+        if (cant < 0) {throw new IllegalArgumentException("La cantidad no puede ser un valor negativo.");} 
+        if (precio < 0) {throw new IllegalArgumentException("El precio no puede ser un valor negativo.");}
+        if (nom == null || nom.trim().isEmpty()) {throw new IllegalArgumentException("El nombre del componente no puede estar vacío.");}
+        if (buscar(cod) != null) {throw new IllegalArgumentException("Ya existe un componente registrado con el código: " + cod);}
+        if (buscar(nom) != null) {throw new IllegalArgumentException("Ya existe un componente registrado con el nombre: '" + nom + "'");}
+        if (nom.matches("^\\d+$")) {throw new IllegalArgumentException("El nombre no puede estar compuesto unicamente por números.");}
         
-        System.out.println("\n---LISTA DE COMPONENTES---");
-        for (Componentes c : componentes) { info(c); }
+        componentes.add(new Componentes(nom, cod, cant, precio, cat));
+        GestorArchivos.guardarEnArchivo(this); 
+        GestorArchivos.registrarHistorial("INSERTAR", "N/A", cod, nom, "N/A", String.valueOf(cant), "Registro inicial de producto");
     }
 
+    public Object[] info(Componentes c) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fechaFormateada = c.getFecha() != null ? c.getFecha().format(formato) : "";
+
+        return new Object[] {
+            c.getCodigo(),
+            c.getNombre(),
+            c.getCategoria(),
+            c.getCantidad(),
+            c.getPrecio(),
+            fechaFormateada
+        };
+    }
+    
+    public ArrayList<Object[]> listar(int opcion) {
+        // Aplicas el ordenamiento según la opción elegida
+        OrdenarPor(opcion); 
+        
+        ArrayList<Object[]> listaFilas = new ArrayList<>();
+        for (Componentes c : componentes) { 
+            listaFilas.add(info(c)); // Usa tu método info() para cada elemento
+        }
+        
+        return listaFilas;
+    }
+
+    public void OrdenarPor(int opcion) {
+        switch (opcion) {
+            case 1: OrdenarCod(); break;
+            case 2: OrdenarNom(); break;
+            case 3: OrdenarCat(); break;
+            case 4: OrdenarStock(); break;
+            case 5: OrdenarPrecio(); break;
+            case 6: OrdenarFecha(); break;
+            default: OrdenarCod(); break;
+        }
+    }
     public void OrdenarCod(){
         Collections.sort(componentes, (c1, c2) -> Integer.valueOf(c1.getCodigo()).compareTo(c2.getCodigo()));//RF-22
     }
@@ -139,7 +160,7 @@ public class Inventario {
         }
     }
 
-    public void Mostrarcategorias() {
+    /*public void Mostrarcategorias() {
         if (categorias.isEmpty()) {
             System.out.println("No hay categorías registradas.");
             return;
@@ -149,7 +170,7 @@ public class Inventario {
             System.out.println((i + 1) + ". " + categorias.get(i));
         }
         System.out.println((categorias.size() + 1) + ". [ + Crear nueva categoría ]");
-    }
+    }*/
 
     public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
         for (String ca : categorias) {
@@ -160,17 +181,25 @@ public class Inventario {
         return false;
     }
     public void NueCat(String nueCat) { // Añade una nueva categoria
-        categorias.add(nueCat); 
-        System.out.println("Categoría '" + nueCat + "' registrada con éxito.");
+        if (nueCat == null || nueCat.trim().isEmpty()) {
+        throw new IllegalArgumentException("El nombre de la categoría no puede estar vacío.");
+        }
+    
+        // Usamos tu propio método BuscarCat para evitar duplicados
+        if (BuscarCat(nueCat)) {
+            throw new IllegalArgumentException("La categoría '" + nueCat + "' ya existe.");
+        }
+        categorias.add(nueCat.trim()); 
+        GestorArchivos.guardarCat(this);
     }
         
     // Obtiene el nombre de la categoría según el número ingresado (1, 2, 3, etc.)
-    public String getCategoriaPorIndice(int indice) {
+    /*public String getCategoriaPorIndice(int indice) {
         if (indice >= 1 && indice <= categorias.size()) {
             return categorias.get(indice - 1);
         }
         return null;
-    }
+    }*/
         
 
 

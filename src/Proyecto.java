@@ -3,12 +3,21 @@ import clases.GestorArchivos;
 import clases.Inventario;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
+import javax.swing.SwingUtilities;
+import view.MenuPrincipal;
 public class Proyecto{
 
     public static void main(String[] args){
 
-        Scanner scanner = new Scanner(System.in);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MenuPrincipal menu = new MenuPrincipal();// Crea la instancia de la interfaz gráfica
+                menu.setVisible(true);//La hace visible
+                menu.setLocationRelativeTo(null);//Centra la ventana en la pantalla
+            }
+        });
+        /*Scanner scanner = new Scanner(System.in);
         Inventario inventario = new Inventario();
         // Carga inicial automática desde el archivo inventario.csv
         GestorArchivos.cargarDesdeArchivo(inventario);
@@ -499,6 +508,6 @@ public class Proyecto{
                 scanner.nextLine();
                 opcion = -1;
             }
-        }while(opcion != 0);
+        }while(opcion != 0);*/
     }
 }

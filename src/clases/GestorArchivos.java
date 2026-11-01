@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class GestorArchivos {
 
@@ -99,5 +100,29 @@ public class GestorArchivos {
         } catch (Exception e) {
             System.out.println("Error al escribir en el historial: " + e.getMessage());
         }
+    }
+    
+    public static void guardarCat(Inventario inv){//Guarda una categoria nueva  
+        try (PrintWriter pw = new PrintWriter(new FileWriter("categorias.csv"))) {
+            for (String cat : inv.getCategoria()) {
+                pw.println(cat);
+            }
+        } catch (IOException e) {e.printStackTrace();}
+    }
+    
+    public static void cargarCategorias(Inventario inv) {
+        File archivo = new File("categorias.csv");
+            if (!archivo.exists()) {
+                return; // Si aún no existe, no hace nada
+            }
+            try (Scanner lector = new Scanner(archivo)) {
+                while (lector.hasNextLine()) {
+                    String linea = lector.nextLine().trim();
+                    // Si la línea no está vacía y la categoría no existe en la lista, la agregamos
+                    if (!linea.isEmpty() && !inv.getCategoria().contains(linea)) {
+                        inv.getCategoria().add(linea);
+                    }
+            }
+        } catch (Exception e) {e.printStackTrace();}   
     }
 }
