@@ -148,6 +148,59 @@ public class Inventario {
             System.out.println("No se encontró un componente con ese código.");
         }
     }
+      // Modifica un componente validando los datos y registrando en el historial cada campo que cambió.
+    // Lanza IllegalArgumentException si algún dato es inválido. Retorna true si hubo cambios.
+    public boolean modificarComponente(int codigo, String nombre, int cantidad, double precio, String categoria) {
+        Componentes c = buscar(codigo);
+        if (c == null) {throw new IllegalArgumentException("No se encontró un componente con el código: " + codigo);}
+        if (nombre == null || nombre.trim().isEmpty()) {throw new IllegalArgumentException("El nombre del componente no puede estar vacío.");}
+        nombre = nombre.trim();
+        if (nombre.matches("^\\d+$")) {throw new IllegalArgumentException("El nombre no puede estar compuesto unicamente por números.");}
+        Componentes otro = buscar(nombre);
+        if (otro != null && otro != c) {throw new IllegalArgumentException("Ya existe un componente registrado con el nombre: '" + nombre + "'");}
+        if (cantidad < 0) {throw new IllegalArgumentException("La cantidad no puede ser un valor negativo.");}
+        if (precio < 0) {throw new IllegalArgumentException("El precio no puede ser un valor negativo.");}
+        if (categoria == null || categoria.trim().isEmpty()) {throw new IllegalArgumentException("La categoría no puede estar vacía.");}
+        categoria = categoria.trim();
+
+        // Si la categoría ya existe se usa su nombre registrado; si no, se crea
+        String catFinal = categoria;
+        for (String ca : categorias) {
+            if (ca.equalsIgnoreCase(categoria)) {catFinal = ca;}
+        }
+        if (!BuscarCat(catFinal)) {NueCat(catFinal);}
+
+        boolean cambio = false;
+
+        if (!c.getNombre().equals(nombre)) {
+            String anterior = c.getNombre();
+            c.setNombre(nombre);
+            GestorArchivos.registrarHistorial("MODIFICAR", "NOMBRE", c.getCodigo(), c.getNombre(), anterior, nombre, "Cambio de nombre del componente");
+            cambio = true;
+        }
+        if (c.getCantidad() != cantidad) {
+            String anterior = String.valueOf(c.getCantidad());
+            c.setCantidad(cantidad);
+            GestorArchivos.registrarHistorial("MODIFICAR", "CANTIDAD", c.getCodigo(), c.getNombre(), anterior, String.valueOf(cantidad), "Ajuste directo de stock");
+            cambio = true;
+        }
+        if (c.getPrecio() != precio) {
+            String anterior = String.valueOf(c.getPrecio());
+            c.setPrecio(precio);
+            GestorArchivos.registrarHistorial("MODIFICAR", "PRECIO", c.getCodigo(), c.getNombre(), anterior, String.valueOf(precio), "Actualizacion de precio");
+            cambio = true;
+        }
+        if (!c.getCategoria().equals(catFinal)) {
+            String anterior = c.getCategoria();
+            c.setCategoria(catFinal);
+            GestorArchivos.registrarHistorial("MODIFICAR", "CATEGORIA", c.getCodigo(), c.getNombre(), anterior, catFinal, "Reclasificación de categoría");
+            cambio = true;
+        }
+
+        if (cambio) {GestorArchivos.guardarEnArchivo(this);}
+        return cambio;
+    }
+
 
     public void eliminar(Componentes c){
         if (c != null) {
