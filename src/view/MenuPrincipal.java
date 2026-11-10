@@ -86,6 +86,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         rbFecha.addActionListener(this::rbFechaActionPerformed);
 
         jButton2.setLabel("MODIFICAR");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jLabel3.setText("Listar componentes:");
 
@@ -276,6 +277,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void rbCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbCantidadActionPerformed
         OrdenarTabla(4);
     }//GEN-LAST:event_rbCantidadActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para modificarlo.", "Modificar", javax.swing.JOptionPane.WARNING_MESSAGE);
+    return;
+    }
+    int codigo = (Integer) jTable1.getValueAt(fila, 0);
+    Componentes comp = inventario.buscar(codigo);
+    if (comp == null) {
+    javax.swing.JOptionPane.showMessageDialog(this, "No se encontró un componente con ese código.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    return;
+    }
+    MenuModificar menuM = new MenuModificar(this, true);
+    menuM.setInventario(this.inventario, comp);
+    menuM.setVisible(true);
+    OrdenarTabla(1);
+    rbCodigo.setSelected(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
