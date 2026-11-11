@@ -2,7 +2,6 @@
 #Integrantes:
 #-Sergio Adrian Ramirez Rodriguez
 #-Carlos Andre Alcantara Quispe
-#-Oliver Aldair Mollo Chambi
 #-Johan Cristian Alejos Madrid
 #-Fernando Alonso Velasquez Castro
 
