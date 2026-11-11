@@ -135,20 +135,7 @@ public class Inventario {
     }
 }
 
-    public void modificar(int codigo, String nuevoNombre, int nuevaCantidad, double nuevoPrecio, String nuevaCategoria){
-        Componentes c = buscar(codigo);
-        if (c != null) {
-            c.setNombre(nuevoNombre);
-            c.setCantidad(nuevaCantidad);
-            c.setPrecio(nuevoPrecio);
-            c.setCategoria(nuevaCategoria);
-            GestorArchivos.guardarEnArchivo(this); // <-- AUTO-GUARDADO
-            System.out.println("Componente modificado correctamente.");
-        } else {
-            System.out.println("No se encontró un componente con ese código.");
-        }
-    }
-      // Modifica un componente validando los datos y registrando en el historial cada campo que cambió.
+    // Modifica un componente validando los datos y registrando en el historial cada campo que cambió.
     // Lanza IllegalArgumentException si algún dato es inválido. Retorna true si hubo cambios.
     public boolean modificarComponente(int codigo, String nombre, int cantidad, double precio, String categoria) {
         Componentes c = buscar(codigo);
