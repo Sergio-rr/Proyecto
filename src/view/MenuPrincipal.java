@@ -133,6 +133,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jRadioButton1.setText("Codigo");
 
         btnSalir.setText("SALIR");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
 
         buttonGroup2.add(jRadioButton2);
         jRadioButton2.setText("Nombre");
@@ -296,6 +297,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     OrdenarTabla(1);
     rbCodigo.setSelected(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        MenuSalir menuS = new MenuSalir(this, true);
+        menuS.setInventario(this.inventario);
+        menuS.setVisible(true);
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
