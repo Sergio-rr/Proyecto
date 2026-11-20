@@ -1,11 +1,11 @@
-2026-10-16;INSERTAR;N/A;109;Modulo Display LCD 16x2;Registro inicial de producto
-2026-10-16;MODIFICAR;PRECIO;109;Modulo Display LCD 16x2;Precio actualizado a: 28.5
-2026-10-16;SALIDA;CANTIDAD;109;Modulo Display LCD 16x2;Despacho de 10 unidades (Stock restante: 5)
-2026-10-16;INSERTAR;N/A;110;Modulo Bluetooth HC-05;N/A;10;Registro inicial de producto
-2026-10-16;MODIFICAR;PRECIO;110;Modulo Bluetooth HC-05;18.5;23.8;Actualizacion de precio
-2026-10-16;ENTRADA;CANTIDAD;110;Modulo Bluetooth HC-05;10;25;Ingreso de 15 unidades
-2026-10-16;SALIDA;CANTIDAD;110;Modulo Bluetooth HC-05;25;5;Despacho de 20 unidades
-2026-11-01;INSERTAR;N/A;111;sss;N/A;8;Registro inicial de producto
-2026-11-11;MODIFICAR;NOMBRE;111;ModuloAWS;sss;ModuloAWS;Cambio de nombre del componente
-2026-11-11;MODIFICAR;CANTIDAD;111;ModuloAWS;8;81;Ajuste directo de stock
-2026-11-11;MODIFICAR;CATEGORIA;111;ModuloAWS;optoeletrónicos;Componentes Pasivos;Reclasificación de categoría
+16/10/2026;INSERTAR;N/A;109;Modulo Display LCD 16x2;Registro inicial de producto;;
+16/10/2026;MODIFICAR;PRECIO;109;Modulo Display LCD 16x2;Precio actualizado a: 28.5;;
+16/10/2026;SALIDA;CANTIDAD;109;Modulo Display LCD 16x2;Despacho de 10 unidades (Stock restante: 5);;
+16/10/2026;INSERTAR;N/A;110;Modulo Bluetooth HC-05;N/A;10;Registro inicial de producto
+16/10/2026;MODIFICAR;PRECIO;110;Modulo Bluetooth HC-05;18.5;23.8;Actualizacion de precio
+16/10/2026;ENTRADA;CANTIDAD;110;Modulo Bluetooth HC-05;10;25;Ingreso de 15 unidades
+16/10/2026;SALIDA;CANTIDAD;110;Modulo Bluetooth HC-05;25;5;Despacho de 20 unidades
+1/11/2026;INSERTAR;N/A;111;sss;N/A;8;Registro inicial de producto
+11/11/2026;MODIFICAR;NOMBRE;111;ModuloAWS;sss;ModuloAWS;Cambio de nombre del componente
+11/11/2026;MODIFICAR;CANTIDAD;111;ModuloAWS;8;81;Ajuste directo de stock
+11/11/2026;MODIFICAR;CATEGORIA;111;ModuloAWS;optoeletrónicos;Componentes Pasivos;Reclasificación de categoría

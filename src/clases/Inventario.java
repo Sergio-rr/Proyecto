@@ -180,11 +180,9 @@ public class Inventario {
             GestorArchivos.registrarHistorial("MODIFICAR", "CATEGORIA", c.getCodigo(), c.getNombre(), anterior, catFinal, "Reclasificación de categoría");
             cambio = true;
         }
-
         if (cambio) {GestorArchivos.guardarEnArchivo(this);}
         return cambio;
     }
-
 
     public void eliminar(Componentes c){
         if (c != null) {
@@ -196,7 +194,6 @@ public class Inventario {
             System.out.println("No se encontró un componente con ese código.");
         }
     }
-
 
     public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
         for (String ca : categorias) {

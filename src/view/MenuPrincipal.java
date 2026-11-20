@@ -96,6 +96,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel3.setText("Listar componentes:");
 
         btnEliminar.setLabel("ELIMINAR");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -295,20 +296,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int fila = jTable1.getSelectedRow();
         if (fila == -1) {
-    JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para modificarlo.", "Modificar", javax.swing.JOptionPane.WARNING_MESSAGE);
-    return;
-    }
-    int codigo = (Integer) jTable1.getValueAt(fila, 0);
-    Componentes comp = inventario.buscar(codigo);
-    if (comp == null) {
-    JOptionPane.showMessageDialog(this, "No se encontró un componente con ese código.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    return;
-    }
-    MenuModificar menuM = new MenuModificar(this, true);
-    menuM.setInventario(this.inventario, comp);
-    menuM.setVisible(true);
-    OrdenarTabla(1);
-    rbCodigo.setSelected(true);        // TODO add your handling code here:
+            JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para modificarlo.", "Modificar", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int codigo = (Integer) jTable1.getValueAt(fila, 0);
+        Componentes comp = inventario.buscar(codigo);
+        if (comp == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró un componente con ese código.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        MenuModificar menuM = new MenuModificar(this, true);
+        menuM.setInventario(this.inventario, comp);
+        menuM.setVisible(true);
+        OrdenarTabla(1);
+        rbCodigo.setSelected(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -350,6 +351,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para eliminarlo.", "Eliminar", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirmar = JOptionPane.showConfirmDialog(this,"¿Está seguro de eliminar este componente?","Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION){
+            int codigo = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
+            Componentes c = inventario.buscar(codigo);
+            if (c != null) {
+                inventario.eliminar(c);
+                OrdenarTabla(1);
+                JOptionPane.showMessageDialog(this,"Componente eliminado correctamente.");
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
