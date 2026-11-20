@@ -5,6 +5,10 @@
 package view;
 import clases.Inventario;
 import clases.Componentes;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author USER
@@ -24,11 +28,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         clases.GestorArchivos.cargarDesdeArchivo(inventario);// Se carga los datos guardados
         OrdenarTabla(1);//Llamamos a actualizar la tabla       
         rbCodigo.setSelected(true);//Se seleccionar el boton código al iniciar
+        rbBCodigo.setSelected(true);
     }
     
     // Método independiente para actualizar y poblar la JTable
     public void OrdenarTabla(int opcion) {
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();//Se obtiene el modelo de la tabla
+        DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();//Se obtiene el modelo de la tabla
         modelo.setRowCount(0);//Se limpia las filas viejas
         
         for (Object[] fila : inventario.listar(opcion)) {// Le pide la lista de filas ya ordenada y formateada directamente al Inventario
@@ -52,20 +57,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         rbPrecio = new javax.swing.JRadioButton();
         btnInsertar = new javax.swing.JButton();
         rbFecha = new javax.swing.JRadioButton();
-        jButton2 = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        btnBuscar = new javax.swing.JButton();
+        rbBCodigo = new javax.swing.JRadioButton();
         btnSalir = new javax.swing.JButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rbBNombre = new javax.swing.JRadioButton();
         rbCodigo = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
         rbNombre = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        rbBCategoria = new javax.swing.JRadioButton();
         rbCategoria = new javax.swing.JRadioButton();
         rbCantidad = new javax.swing.JRadioButton();
 
@@ -85,12 +90,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         rbFecha.setText("Fecha de inserción");
         rbFecha.addActionListener(this::rbFechaActionPerformed);
 
-        jButton2.setLabel("MODIFICAR");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnModificar.setLabel("MODIFICAR");
+        btnModificar.addActionListener(this::btnModificarActionPerformed);
 
         jLabel3.setText("Listar componentes:");
 
-        jButton3.setLabel("ELIMINAR");
+        btnEliminar.setLabel("ELIMINAR");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -127,16 +132,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jButton4.setText("MOVIMIENTOS / ALERTAS DE STOCK");
 
-        jButton5.setText("BUSCAR");
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
 
-        buttonGroup2.add(jRadioButton1);
-        jRadioButton1.setText("Codigo");
+        buttonGroup2.add(rbBCodigo);
+        rbBCodigo.setText("Codigo");
 
         btnSalir.setText("SALIR");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
 
-        buttonGroup2.add(jRadioButton2);
-        jRadioButton2.setText("Nombre");
+        buttonGroup2.add(rbBNombre);
+        rbBNombre.setText("Nombre");
 
         buttonGroup1.add(rbCodigo);
         rbCodigo.setText("Codigo");
@@ -146,8 +152,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         rbNombre.setText("Nombre");
         rbNombre.addActionListener(this::rbNombreActionPerformed);
 
-        buttonGroup2.add(jRadioButton3);
-        jRadioButton3.setText("Categoria");
+        buttonGroup2.add(rbBCategoria);
+        rbBCategoria.setText("Categoria");
 
         buttonGroup1.add(rbCategoria);
         rbCategoria.setText("Categoria");
@@ -165,38 +171,45 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnInsertar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnInsertar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnModificar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEliminar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(112, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton5)
+                                .addComponent(btnBuscar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton1)
+                                .addComponent(rbBCodigo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2)
+                                .addComponent(rbBNombre)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rbBCategoria))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbFecha)
-                            .addComponent(rbPrecio)
-                            .addComponent(rbCantidad)
-                            .addComponent(rbCategoria)
-                            .addComponent(rbNombre)
-                            .addComponent(rbCodigo)
-                            .addComponent(jLabel3)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rbFecha)
+                                    .addComponent(rbPrecio)
+                                    .addComponent(rbCantidad)
+                                    .addComponent(rbCategoria)
+                                    .addComponent(rbNombre)
+                                    .addComponent(rbCodigo)
+                                    .addComponent(jLabel3))
+                                .addGap(19, 19, 19))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnSalir)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,8 +219,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
+                    .addComponent(btnModificar)
+                    .addComponent(btnEliminar)
                     .addComponent(jButton4))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,13 +242,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jRadioButton1)
-                        .addComponent(jRadioButton2)
-                        .addComponent(jRadioButton3)
+                        .addComponent(rbBCodigo)
+                        .addComponent(rbBNombre)
+                        .addComponent(rbBCategoria)
                         .addComponent(btnSalir))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton5)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -250,9 +263,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         MenuInsertar menuI = new MenuInsertar(this, true);//Hace q al oprimir el boton insetar abra el MenuInsertar
         menuI.setInventario(this.inventario);//Transfiere el objeto inventario al menuInsertar
-        menuI.setVisible(true);//
+        menuI.setVisible(true);//Hace visible la ventana MenuInsertar, es decir, la abre en pantalla.
         OrdenarTabla(1);
-        rbCodigo.setSelected(true);
+        rbCodigo.setSelected(true);//Selecciona el botón de opción llamado rbCodigo.
     }//GEN-LAST:event_btnInsertarActionPerformed
 
     private void rbFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbFechaActionPerformed
@@ -279,16 +292,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         OrdenarTabla(4);
     }//GEN-LAST:event_rbCantidadActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         int fila = jTable1.getSelectedRow();
         if (fila == -1) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para modificarlo.", "Modificar", javax.swing.JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(this, "Seleccione un componente de la tabla para modificarlo.", "Modificar", javax.swing.JOptionPane.WARNING_MESSAGE);
     return;
     }
     int codigo = (Integer) jTable1.getValueAt(fila, 0);
     Componentes comp = inventario.buscar(codigo);
     if (comp == null) {
-    javax.swing.JOptionPane.showMessageDialog(this, "No se encontró un componente con ese código.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    JOptionPane.showMessageDialog(this, "No se encontró un componente con ese código.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
     return;
     }
     MenuModificar menuM = new MenuModificar(this, true);
@@ -296,13 +309,47 @@ public class MenuPrincipal extends javax.swing.JFrame {
     menuM.setVisible(true);
     OrdenarTabla(1);
     rbCodigo.setSelected(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         MenuSalir menuS = new MenuSalir(this, true);
         menuS.setInventario(this.inventario);
         menuS.setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        try{
+            DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();//Se obtiene el modelo de la tabla
+            modelo.setRowCount(0);//Se limpia las filas viejas
+        
+            if (txtBuscar.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un dato para buscar.");
+                return;
+            }
+            
+            Componentes c = null;
+        
+            if (rbBCodigo.isSelected()){c = inventario.buscar(Integer.parseInt(txtBuscar.getText()));}
+
+            else if (rbBNombre.isSelected()){c = inventario.buscar(txtBuscar.getText());}
+
+            else if (rbBCategoria.isSelected()){
+                ArrayList<Componentes> encontrados = inventario.buscarPorCategoria(txtBuscar.getText());
+
+                for (Componentes comp : encontrados) {
+                    modelo.addRow(inventario.info(comp));
+                }
+            }
+            if (c != null){modelo.addRow(inventario.info(c));
+            }
+            if (modelo.getRowCount() == 0) {JOptionPane.showMessageDialog(this, "No se encontraron componentes.");}  
+            
+        }catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Ingrese un código numérico válido.");
+        }
+        
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,27 +377,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JRadioButton rbBCategoria;
+    private javax.swing.JRadioButton rbBCodigo;
+    private javax.swing.JRadioButton rbBNombre;
     private javax.swing.JRadioButton rbCantidad;
     private javax.swing.JRadioButton rbCategoria;
     private javax.swing.JRadioButton rbCodigo;
     private javax.swing.JRadioButton rbFecha;
     private javax.swing.JRadioButton rbNombre;
     private javax.swing.JRadioButton rbPrecio;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

@@ -116,16 +116,6 @@ public class MenuInsertar extends javax.swing.JDialog {
             int cantidad = Integer.parseInt(txtCantidad.getText().trim());
             double precio = Double.parseDouble(txtPrecio.getText().trim());
 
-            if (nombre.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Se valida si el nombre está compuesto unicamente por numeros
-            if (nombre.matches("^\\d+$")) {
-                JOptionPane.showMessageDialog(this, "El nombre no puede estar compuesto únicamente por números.", "Error de validación", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             String catSeleccionada = cbCategoria.getSelectedItem().toString();// Gestion de la categoría seleccionada
 
             if (catSeleccionada.equals("--Nueva categoria--")) {

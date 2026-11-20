@@ -120,20 +120,17 @@ public class Inventario {
         }
         return null;
     }
+    
+    public ArrayList<Componentes> buscarPorCategoria(String categoria) {
+        ArrayList<Componentes> encontrados = new ArrayList<>();
 
-    public void buscarPorCategoria(String categoria) { //Busqueda por categoria
-    boolean encontrado = false;
-    System.out.println("\n--- COMPONENTES EN LA CATEGORÍA: " + categoria.toUpperCase() + " ---");
-    for (Componentes c : componentes) {
-        if (c.getCategoria().equalsIgnoreCase(categoria)) {
-            info(c);
-            encontrado = true;
+        for (Componentes c : componentes) {
+            if (c.getCategoria().equalsIgnoreCase(categoria)) {
+                encontrados.add(c);
+            }
         }
+        return encontrados;
     }
-    if (!encontrado) {
-        System.out.println("No se encontraron componentes en esta categoría.");
-    }
-}
 
     // Modifica un componente validando los datos y registrando en el historial cada campo que cambió.
     // Lanza IllegalArgumentException si algún dato es inválido. Retorna true si hubo cambios.
@@ -200,17 +197,6 @@ public class Inventario {
         }
     }
 
-    /*public void Mostrarcategorias() {
-        if (categorias.isEmpty()) {
-            System.out.println("No hay categorías registradas.");
-            return;
-        }
-        System.out.println("\n--- CATEGORÍAS DISPONIBLES ---");
-        for (int i = 0; i < categorias.size(); i++) {
-            System.out.println((i + 1) + ". " + categorias.get(i));
-        }
-        System.out.println((categorias.size() + 1) + ". [ + Crear nueva categoría ]");
-    }*/
 
     public boolean BuscarCat(String cate) {//Verifica si existe o no la categoria ingresada
         for (String ca : categorias) {
@@ -232,16 +218,6 @@ public class Inventario {
         categorias.add(nueCat.trim()); 
         GestorArchivos.guardarCat(this);
     }
-        
-    // Obtiene el nombre de la categoría según el número ingresado (1, 2, 3, etc.)
-    /*public String getCategoriaPorIndice(int indice) {
-        if (indice >= 1 && indice <= categorias.size()) {
-            return categorias.get(indice - 1);
-        }
-        return null;
-    }*/
-        
-
 
     // Registrar entrada de stock (+ Reposición)
     public boolean registrarEntrada(int codigo, int cantidadIngreso) {
