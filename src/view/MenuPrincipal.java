@@ -132,6 +132,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable1);
 
         jButton4.setText("MOVIMIENTOS / ALERTAS DE STOCK");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         btnBuscar.setText("BUSCAR");
         btnBuscar.addActionListener(this::btnBuscarActionPerformed);
@@ -370,6 +371,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        MenuMovimientos menuMov = new MenuMovimientos(this, true);
+        menuMov.setInventario(this.inventario);
+        int fila = jTable1.getSelectedRow();
+        if (fila != -1) {
+            menuMov.setCodigoInicial((Integer) jTable1.getValueAt(fila, 0));
+        }
+        menuMov.setVisible(true);
+        OrdenarTabla(1);
+        rbCodigo.setSelected(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

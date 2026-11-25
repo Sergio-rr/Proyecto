@@ -301,6 +301,48 @@ public class Inventario {
     }
 
     // Método getter para permitir al GestorArchivos acceder a la lista
+        // ===================== ALERTAS DE STOCK Y MOVIMIENTOS (GUI) =====================
+    public static final int STOCK_CRITICO = 5; // Umbral de stock crítico (<= 5 unidades)
+
+    public boolean esStockCritico(Componentes c) {
+        return c.getCantidad() <= STOCK_CRITICO;
+    }
+
+    // Filas (para una JTable) de los componentes con stock crítico, del menor al mayor stock
+    public ArrayList<Object[]> listarStockCritico() {
+        ArrayList<Componentes> criticos = new ArrayList<>();
+        for (Componentes c : componentes) {
+            if (esStockCritico(c)) {
+                criticos.add(c);
+            }
+        }
+        criticos.sort((c1, c2) -> Integer.compare(c1.getCantidad(), c2.getCantidad()));
+
+        ArrayList<Object[]> filas = new ArrayList<>();
+        for (Componentes c : criticos) {
+            filas.add(info(c));
+        }
+        return filas;
+    }
+
+    // Registra una entrada o una salida de stock validando los datos.
+    // Lanza IllegalArgumentException si algo es inválido. Retorna el nuevo stock.
+    public int registrarMovimiento(int codigo, boolean esEntrada, int unidades) {
+        Componentes c = buscar(codigo);
+        if (c == null) {throw new IllegalArgumentException("No se encontró un componente con el código: " + codigo);}
+        if (unidades <= 0) {throw new IllegalArgumentException("La cantidad del movimiento debe ser mayor que cero.");}
+
+        if (esEntrada) {
+            if (unidades > Integer.MAX_VALUE - c.getCantidad()) {throw new IllegalArgumentException("La cantidad ingresada es demasiado grande.");}
+            registrarEntrada(codigo, unidades);
+        } else {
+            if (unidades > c.getCantidad()) {throw new IllegalArgumentException("Stock insuficiente: solo hay " + c.getCantidad() + " unidades disponibles.");}
+            registrarSalida(codigo, unidades);
+        }
+        return c.getCantidad();
+    }
+
+
     public ArrayList<Componentes> getComponentes() {
         return componentes;
     }
